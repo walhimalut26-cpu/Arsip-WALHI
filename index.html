@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WALHI MALUT - Sistem Pengarsipan Digital</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        walhi: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                            950: '#022c22',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Kustomisasi scrollbar halus */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .fade-in {
+            animation: fadeIn 0.25s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-walhi-200 selection:text-walhi-900">
+
+    <!-- ==================== NOTIFIKASI TOAST ==================== -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+    <!-- ==================== HALAMAN LOGIN ==================== -->
+    <section id="login-view" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-walhi-950 via-walhi-900 to-emerald-800 p-4 relative overflow-hidden">
+        <!-- Dekorasi latar belakang -->
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                <defs>
+                    <pattern id="leaf-pattern" width="60" height="60" patternUnits="userSpaceOnUse">
+                        <path d="M30 5 C45 5 55 15 55 30 C40 30 30 20 30 5 Z" fill="currentColor" class="text-white"/>
+                        <path d="M30 55 C15 55 5 45 5 30 C20 30 30 40 30 55 Z" fill="currentColor" class="text-white"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#leaf-pattern)"/>
+            </svg>
+        </div>
+
+        <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden relative z-10 fade-in border border-walhi-100">
+            <!-- Header Kartu Login -->
+            <div class="bg-walhi-800 px-6 py-8 text-center text-white relative">
+                <div class="w-16 h-16 bg-white/15 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/25 shadow-inner">
+                    <i data-lucide="trees" class="w-9 h-9 text-walhi-200"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold tracking-tight">WALHI MALUT</h1>
+                <p class="text-walhi-200 text-xs font-medium uppercase tracking-wider mt-1">Wahana Lingkungan Hidup Indonesia</p>
+                <p class="text-walhi-100/90 text-sm mt-2">Sistem Pengarsipan Dokumen Digital</p>
+            </div>
+
+            <!-- Form Login -->
+            <form id="login-form" class="p-6 sm:p-8 space-y-5" novalidate>
+                <div id="login-error" class="hidden bg-red-50 border-l-4 border-red-500 text-red-700 p-3.5 rounded-lg text-sm flex items-start gap-2.5">
+                    <i data-lucide="alert-circle" class="w-5 h-5 text-red-500 shrink-0 mt-0.5"></i>
+                    <span id="login-error-text">Username atau password tidak sesuai.</span>
+                </div>
+
+                <div>
+                    <label for="username" class="block text-sm font-semibold text-slate-700 mb-1.5">Username</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i data-lucide="user" class="w-4 h-4"></i>
+                        </div>
+                        <input type="text" id="username" name="username" required autocomplete="username"
+                            placeholder="Masukkan username"
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-500 focus:border-walhi-500 focus:bg-white transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i data-lucide="lock" class="w-4 h-4"></i>
+                        </div>
+                        <input type="password" id="password" name="password" required autocomplete="current-password"
+                            placeholder="Masukkan password"
+                            class="w-full pl-10 pr-11 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-500 focus:border-walhi-500 focus:bg-white transition">
+                        <button type="button" id="toggle-password" aria-label="Tampilkan atau sembunyikan password"
+                            class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-walhi-700 transition">
+                            <i id="eye-icon" data-lucide="eye" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-xs text-slate-500">
+                    <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                        <input type="checkbox" id="remember-session" checked class="rounded border-slate-300 text-walhi-600 focus:ring-walhi-500">
+                        <span>Tetap masuk di browser ini</span>
+                    </label>
+                    <span class="text-walhi-700 font-medium">Maluku Utara</span>
+                </div>
+
+                <button type="submit"
+                    class="w-full py-3 px-4 bg-walhi-700 hover:bg-walhi-800 active:bg-walhi-900 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 text-sm">
+                    <i data-lucide="log-in" class="w-4 h-4"></i>
+                    <span>Masuk ke Sistem Arsip</span>
+                </button>
+            </form>
+
+            <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-100 text-center text-xs text-slate-500">
+                &copy; 2026 WALHI Maluku Utara &bull; Penyimpanan Lokal Terenkripsi Browser
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== DASHBOARD UTAMA ==================== -->
+    <div id="app-view" class="hidden flex-1 flex flex-col">
+        
+        <!-- Top Navigation Bar -->
+        <header class="bg-walhi-900 text-white shadow-md sticky top-0 z-30 border-b border-walhi-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16 gap-3">
+                    <!-- Brand -->
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-10 h-10 bg-walhi-700/80 border border-walhi-500/40 rounded-xl flex items-center justify-center shrink-0 shadow-sm">
+                            <i data-lucide="trees" class="w-5 h-5 text-walhi-200"></i>
+                        </div>
+                        <div class="truncate">
+                            <div class="flex items-center gap-2">
+                                <span class="font-extrabold text-base sm:text-lg tracking-tight text-white">WALHI MALUT</span>
+                                <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-walhi-700 text-walhi-100 border border-walhi-600">
+                                    E-Arsip
+                                </span>
+                            </div>
+                            <p class="text-[11px] text-walhi-200 truncate">Sistem Pengarsipan Digital Maluku Utara</p>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons Header -->
+                    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                        <!-- Backup / Restore Dropdown atau Tombol -->
+                        <div class="flex items-center gap-1.5">
+                            <button type="button" id="btn-export-backup" title="Cadangkan seluruh data arsip & PDF ke file JSON"
+                                class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-walhi-800 hover:bg-walhi-700 text-walhi-100 text-xs font-medium border border-walhi-700 transition">
+                                <i data-lucide="download-cloud" class="w-4 h-4 text-walhi-300"></i>
+                                <span class="hidden md:inline">Backup JSON</span>
+                            </button>
+                            <label for="input-import-backup" title="Pulihkan data dari file backup JSON"
+                                class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-walhi-800 hover:bg-walhi-700 text-walhi-100 text-xs font-medium border border-walhi-700 transition">
+                                <i data-lucide="upload-cloud" class="w-4 h-4 text-walhi-300"></i>
+                                <span class="hidden md:inline">Restore</span>
+                                <input type="file" id="input-import-backup" accept=".json,application/json" class="hidden">
+                            </label>
+                        </div>
+
+                        <div class="h-6 w-px bg-walhi-700 hidden sm:block"></div>
+
+                        <!-- User & Logout -->
+                        <div class="flex items-center gap-2.5">
+                            <div class="hidden lg:block text-right">
+                                <p class="text-xs font-semibold text-white leading-tight">Walhi2026malut</p>
+                                <p class="text-[11px] text-walhi-300">Administrator Arsip</p>
+                            </div>
+                            <button type="button" id="btn-logout"
+                                class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-red-600/90 hover:bg-red-600 text-white text-xs font-semibold shadow-sm transition">
+                                <i data-lucide="log-out" class="w-4 h-4"></i>
+                                <span>Keluar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+            
+            <!-- Banner Info Penyimpanan GitHub Pages -->
+            <div class="bg-white border border-walhi-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-start sm:items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-walhi-50 text-walhi-700 flex items-center justify-center shrink-0 border border-walhi-100">
+                        <i data-lucide="hard-drive" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-800">Penyimpanan Arsip Lokal (IndexedDB Browser)</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">
+                            Dokumen PDF tersimpan langsung di peramban perangkat ini. Gunakan fitur <strong class="text-walhi-700">Backup JSON</strong> secara berkala untuk mencadangkan atau memindahkan arsip ke komputer lain.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                    <span id="storage-usage-badge" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-semibold">
+                        <i data-lucide="database" class="w-3.5 h-3.5 text-walhi-600"></i>
+                        <span id="storage-size-text">0 MB Terpakai</span>
+                    </span>
+                    <button type="button" id="btn-open-upload-modal"
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-walhi-700 hover:bg-walhi-800 text-white text-xs sm:text-sm font-semibold shadow-sm hover:shadow transition">
+                        <i data-lucide="file-plus-2" class="w-4 h-4"></i>
+                        <span>Unggah Arsip PDF</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kartu Statistik (Total & 4 Departemen) -->
+            <section aria-label="Statistik Arsip per Departemen" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
+                <!-- Total Arsip -->
+                <div data-filter-dept="ALL" class="stat-card cursor-pointer bg-gradient-to-br from-walhi-800 to-walhi-900 text-white rounded-2xl p-4 shadow-sm hover:shadow-md transition border border-walhi-700 flex flex-col justify-between">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-walhi-200">Total Seluruh Arsip</span>
+                        <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center">
+                            <i data-lucide="folder-archive" class="w-4 h-4 text-walhi-200"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between">
+                        <p id="stat-total" class="text-3xl font-extrabold">0</p>
+                        <span class="text-xs text-walhi-200">Dokumen PDF</span>
+                    </div>
+                </div>
+
+                <!-- Dept 1: Manajemen Pengetahuan dan Database -->
+                <div data-filter-dept="Departemen Manajemen Pengetahuan dan Database" class="stat-card cursor-pointer bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition border border-slate-200/80 hover:border-emerald-400 flex flex-col justify-between">
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="text-xs font-bold text-slate-700 leading-snug">Dept. Manajemen Pengetahuan & Database</span>
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
+                            <i data-lucide="database" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between">
+                        <p id="stat-dept-1" class="text-2xl font-extrabold text-emerald-700">0</p>
+                        <span class="text-[11px] font-medium text-slate-400">Klik untuk filter</span>
+                    </div>
+                </div>
+
+                <!-- Dept 2: Advokasi dan Kampanye -->
+                <div data-filter-dept="Departemen Advokasi dan Kampanye" class="stat-card cursor-pointer bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition border border-slate-200/80 hover:border-amber-400 flex flex-col justify-between">
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="text-xs font-bold text-slate-700 leading-snug">Dept. Advokasi dan Kampanye</span>
+                        <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0">
+                            <i data-lucide="megaphone" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between">
+                        <p id="stat-dept-2" class="text-2xl font-extrabold text-amber-700">0</p>
+                        <span class="text-[11px] font-medium text-slate-400">Klik untuk filter</span>
+                    </div>
+                </div>
+
+                <!-- Dept 3: Pengembangan Program -->
+                <div data-filter-dept="Departemen Pengembangan Program" class="stat-card cursor-pointer bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition border border-slate-200/80 hover:border-sky-400 flex flex-col justify-between">
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="text-xs font-bold text-slate-700 leading-snug">Dept. Pengembangan Program</span>
+                        <div class="w-8 h-8 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center shrink-0">
+                            <i data-lucide="sprout" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between">
+                        <p id="stat-dept-3" class="text-2xl font-extrabold text-sky-700">0</p>
+                        <span class="text-[11px] font-medium text-slate-400">Klik untuk filter</span>
+                    </div>
+                </div>
+
+                <!-- Dept 4: Keuangan -->
+                <div data-filter-dept="Departemen Keuangan" class="stat-card cursor-pointer bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition border border-slate-200/80 hover:border-purple-400 flex flex-col justify-between">
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="text-xs font-bold text-slate-700 leading-snug">Departemen Keuangan</span>
+                        <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center shrink-0">
+                            <i data-lucide="wallet" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between">
+                        <p id="stat-dept-4" class="text-2xl font-extrabold text-purple-700">0</p>
+                        <span class="text-[11px] font-medium text-slate-400">Klik untuk filter</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel Filter & Pencarian -->
+            <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 sm:p-5">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-end">
+                    <!-- Pencarian -->
+                    <div class="md:col-span-5">
+                        <label for="search-input" class="block text-xs font-semibold text-slate-600 mb-1.5">Cari Dokumen Arsip</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                <i data-lucide="search" class="w-4 h-4"></i>
+                            </div>
+                            <input type="text" id="search-input" placeholder="Cari judul dokumen, nomor surat, atau keterangan..."
+                                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-500 focus:bg-white transition">
+                        </div>
+                    </div>
+
+                    <!-- Filter Departemen -->
+                    <div class="md:col-span-4">
+                        <label for="filter-department" class="block text-xs font-semibold text-slate-600 mb-1.5">Kategori Departemen</label>
+                        <select id="filter-department"
+                            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-500 focus:bg-white transition">
+                            <option value="ALL">Semua Departemen</option>
+                            <option value="Departemen Manajemen Pengetahuan dan Database">Departemen Manajemen Pengetahuan dan Database</option>
+                            <option value="Departemen Advokasi dan Kampanye">Departemen Advokasi dan Kampanye</option>
+                            <option value="Departemen Pengembangan Program">Departemen Pengembangan Program</option>
+                            <option value="Departemen Keuangan">Departemen Keuangan</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Tahun / Bulan -->
+                    <div class="md:col-span-3 flex gap-2">
+                        <div class="flex-1">
+                            <label for="filter-period" class="block text-xs font-semibold text-slate-600 mb-1.5">Bulan / Tahun</label>
+                            <input type="month" id="filter-period"
+                                class="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-500 focus:bg-white transition">
+                        </div>
+                        <button type="button" id="btn-reset-filter" title="Reset semua filter"
+                            class="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition flex items-center justify-center shrink-0 self-end h-[42px]">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Daftar Dokumen Arsip -->
+            <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="files" class="w-5 h-5 text-walhi-700"></i>
+                        <h3 class="font-bold text-slate-800 text-base">Daftar Arsip Dokumen PDF</h3>
+                        <span id="filtered-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-walhi-100 text-walhi-800">0 dokumen</span>
+                    </div>
+                    <div class="text-xs text-slate-500">
+                        Diurutkan berdasarkan tanggal terbaru
+                    </div>
+                </div>
+
+                <!-- Tampilan Tabel Desktop -->
+                <div class="hidden lg:block overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                <th class="py-3.5 px-5">Dokumen & Nomor Arsip</th>
+                                <th class="py-3.5 px-4">Kategori Departemen</th>
+                                <th class="py-3.5 px-4">Tanggal</th>
+                                <th class="py-3.5 px-4">Ukuran</th>
+                                <th class="py-3.5 px-5 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="archive-table-body" class="divide-y divide-slate-100 text-sm">
+                            <!-- Diisi dinamis oleh JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Tampilan Kartu Mobile & Tablet -->
+                <div id="archive-cards-container" class="lg:hidden divide-y divide-slate-100">
+                    <!-- Diisi dinamis oleh JS -->
+                </div>
+
+                <!-- State Kosong -->
+                <div id="empty-state" class="hidden py-14 px-4 text-center">
+                    <div class="w-16 h-16 bg-walhi-50 text-walhi-600 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-walhi-100">
+                        <i data-lucide="file-search" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="text-base font-bold text-slate-800">Belum Ada Dokumen Arsip</h4>
+                    <p class="text-sm text-slate-500 max-w-md mx-auto mt-1">
+                        Tidak ditemukan dokumen PDF yang sesuai dengan kriteria pencarian saat ini, atau belum ada arsip yang diunggah.
+                    </p>
+                    <button type="button" id="btn-empty-upload"
+                        class="mt-5 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-walhi-700 hover:bg-walhi-800 text-white text-sm font-semibold shadow-sm transition">
+                        <i data-lucide="upload" class="w-4 h-4"></i>
+                        <span>Unggah Dokumen Pertama</span>
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500">
+            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+                <p><strong class="text-walhi-800">WALHI MALUT</strong> &mdash; Wahana Lingkungan Hidup Indonesia Eksekutif Daerah Maluku Utara</p>
+                <p>Kompatibel GitHub Pages &bull; Penyimpanan Lokal IndexedDB</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ==================== MODAL UNGGAH ARSIP PDF ==================== -->
+    <div id="upload-modal" class="fixed inset-0 z-40 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200 my-auto fade-in">
+            <!-- Header Modal -->
+            <div class="bg-walhi-800 px-6 py-4 text-white flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <i data-lucide="file-up" class="w-5 h-5 text-walhi-200"></i>
+                    <h3 class="font-bold text-base">Unggah Arsip Dokumen PDF</h3>
+                </div>
+                <button type="button" id="btn-close-upload-modal" class="p-1.5 rounded-lg hover:bg-white/10 text-walhi-100 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Form Upload -->
+            <form id="upload-form" class="p-6 space-y-4">
+                <div>
+                    <label for="doc-title" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                        Judul Dokumen <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="doc-title" required placeholder="Contoh: Laporan Pemantauan Tambang Halmahera 2026"
+                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-500 focus:bg-white transition">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="doc-number" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                            Nomor Surat / Arsip <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="doc-number" required placeholder="Contoh: 014/WALHI-MU/XI/2026"
+                            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-500 focus:bg-white transition">
+                    </div>
+
+                    <div>
+                        <label for="doc-date" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                            Tanggal Dokumen <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" id="doc-date" required
+                            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-500 focus:bg-white transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="doc-department" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                        Kategori Departemen <span class="text-red-500">*</span>
+                    </label>
+                    <select id="doc-department" required
+                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-500 focus:bg-white transition">
+                        <option value="">-- Pilih Departemen --</option>
+                        <option value="Departemen Manajemen Pengetahuan dan Database">Departemen Manajemen Pengetahuan dan Database</option>
+                        <option value="Departemen Advokasi dan Kampanye">Departemen Advokasi dan Kampanye</option>
+                        <option value="Departemen Pengembangan Program">Departemen Pengembangan Program</option>
+                        <option value="Departemen Keuangan">Departemen Keuangan</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="doc-description" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                        Keterangan / Ringkasan Isi
+                    </label>
+                    <textarea id="doc-description" rows="2" placeholder="Catatan singkat mengenai isi atau konteks dokumen arsip..."
+                        class="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-500 focus:bg-white transition"></textarea>
+                </div>
+
+                <!-- Dropzone File PDF -->
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                        File Dokumen (Khusus PDF) <span class="text-red-500">*</span>
+                    </label>
+                    <div id="pdf-dropzone"
+                        class="border-2 border-dashed border-slate-300 hover:border-walhi-500 bg-slate-50 hover:bg-walhi-50/40 rounded-2xl p-5 text-center cursor-pointer transition">
+                        <input type="file" id="doc-file" accept=".pdf,application/pdf" class="hidden">
+                        <div id="dropzone-placeholder">
+                            <div class="w-11 h-11 rounded-xl bg-walhi-100 text-walhi-700 flex items-center justify-center mx-auto mb-2">
+                                <i data-lucide="file-text" class="w-6 h-6"></i>
+                            </div>
+                            <p class="text-sm font-semibold text-slate-700">Klik untuk memilih file PDF atau seret ke sini</p>
+                            <p class="text-xs text-slate-500 mt-1">Hanya mendukung format dokumen <span class="font-semibold text-walhi-700">.PDF</span></p>
+                        </div>
+                        <div id="dropzone-selected" class="hidden flex items-center justify-between bg-white p-3 rounded-xl border border-walhi-200 text-left">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <div class="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0">
+                                    <i data-lucide="file-check-2" class="w-5 h-5"></i>
+                                </div>
+                                <div class="truncate">
+                                    <p id="selected-file-name" class="text-sm font-semibold text-slate-800 truncate">dokumen.pdf</p>
+                                    <p id="selected-file-size" class="text-xs text-slate-500">0 KB</p>
+                                </div>
+                            </div>
+                            <button type="button" id="btn-remove-selected-file" class="p-1.5 text-slate-400 hover:text-red-600 rounded-lg transition">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Tombol Form -->
+                <div class="pt-2 flex items-center justify-end gap-2.5 border-t border-slate-100">
+                    <button type="button" id="btn-cancel-upload"
+                        class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition">
+                        Batal
+                    </button>
+                    <button type="submit" id="btn-submit-upload"
+                        class="px-5 py-2.5 rounded-xl bg-walhi-700 hover:bg-walhi-800 text-white text-sm font-semibold shadow-sm transition flex items-center gap-2">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        <span>Simpan ke Arsip</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL PRATINJAU (PREVIEW) PDF ==================== -->
+    <div id="preview-modal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-xs flex items-center justify-center p-2 sm:p-5">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl h-[92vh] flex flex-col overflow-hidden border border-slate-300 fade-in">
+            <!-- Header Modal Preview -->
+            <div class="bg-walhi-900 text-white px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3 shrink-0">
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+                        <span id="preview-dept-badge" class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-walhi-700 text-walhi-100">Departemen</span>
+                        <span id="preview-doc-number" class="text-xs text-walhi-200 font-mono truncate">No. Arsip</span>
+                    </div>
+                    <h3 id="preview-doc-title" class="font-bold text-sm sm:text-base truncate mt-0.5">Judul Dokumen PDF</h3>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                    <button type="button" id="btn-preview-download"
+                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-walhi-600 hover:bg-walhi-500 text-white text-xs font-semibold transition">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">Unduh PDF</span>
+                    </button>
+                    <button type="button" id="btn-close-preview-modal"
+                        class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Metadata Bar -->
+            <div id="preview-meta-bar" class="bg-slate-50 border-b border-slate-200 px-4 sm:px-6 py-2.5 text-xs text-slate-600 flex flex-wrap items-center justify-between gap-2 shrink-0">
+                <p id="preview-doc-desc" class="italic text-slate-600">Keterangan dokumen...</p>
+                <span id="preview-doc-date" class="font-medium text-slate-700 shrink-0">Tanggal: -</span>
+            </div>
+
+            <!-- Viewer PDF -->
+            <div class="flex-1 bg-slate-200 relative overflow-hidden">
+                <iframe id="pdf-viewer-frame" class="w-full h-full border-0" title="Pratinjau Dokumen PDF"></iframe>
+                <div id="pdf-fallback-msg" class="hidden absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-slate-100">
+                    <i data-lucide="file-warning" class="w-12 h-12 text-amber-500 mb-3"></i>
+                    <p class="font-bold text-slate-800">Browser seluler membatasi pratinjau PDF tertanam</p>
+                    <p class="text-xs text-slate-500 max-w-sm mt-1">Silakan klik tombol Unduh PDF atau buka di tab baru untuk membaca dokumen ini.</p>
+                    <a id="pdf-open-newtab" href="#" target="_blank" rel="noopener"
+                        class="mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-walhi-700 text-white text-xs font-semibold">
+                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                        <span>Buka PDF di Tab Baru</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL KONFIRMASI HAPUS ==================== -->
+    <div id="delete-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 border border-slate-200 fade-in">
+            <div class="flex items-start gap-3.5">
+                <div class="w-11 h-11 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center shrink-0 border border-red-100">
+                    <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">Hapus Dokumen Arsip?</h3>
+                    <p class="text-sm text-slate-600 mt-1">
+                        Anda akan menghapus arsip <strong id="delete-doc-name" class="text-slate-800"></strong> secara permanen dari penyimpanan browser ini.
+                    </p>
+                </div>
+            </div>
+            <div class="mt-6 flex items-center justify-end gap-2.5">
+                <button type="button" id="btn-cancel-delete"
+                    class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition">
+                    Batal
+                </button>
+                <button type="button" id="btn-confirm-delete"
+                    class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold shadow-sm transition flex items-center gap-1.5">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    <span>Ya, Hapus Permanen</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== LOGIKA JAVASCRIPT APLIKASI ==================== -->
+    <script>
+        /**
+         * Konfigurasi Kredensial & Konstanta Sistem Pengarsipan WALHI MALUT
+         */
+        const AUTH_CONFIG = {
+            username: 'Walhi2026malut',
+            password: 'lestari2026',
+            sessionKey: 'walhi_malut_auth_session_2026'
+        };
+
+        const DB_CONFIG = {
+            name: 'WalhiMalutArchiveDB',
+            version: 1,
+            storeName: 'archives'
+        };
+
+        const DEPARTMENTS = [
+            'Departemen Manajemen Pengetahuan dan Database',
+            'Departemen Advokasi dan Kampanye',
+            'Departemen Pengembangan Program',
+            'Departemen Keuangan'
+        ];
+
+        // State global aplikasi
+        let dbInstance = null;
+        let allArchives = [];
+        let selectedPdfFile = null;
+        let pendingDeleteId = null;
+        let currentPreviewObjectUrl = null;
+        let currentPreviewDoc = null;
+
+        // ==================== INISIALISASI INDEXEDDB ====================
+        function initDatabase() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_CONFIG.name, DB_CONFIG.version);
+
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(DB_CONFIG.storeName)) {
+                        const store = db.createObjectStore(DB_CONFIG.storeName, { keyPath: 'id' });
+                        store.createIndex('department', 'department', { unique: false });
+                        store.createIndex('date', 'date', { unique: false });
+                    }
+                };
+
+                request.onsuccess = (event) => {
+                    dbInstance = event.target.result;
+                    resolve(dbInstance);
+                };
+
+                request.onerror = (event) => {
+                    console.error('IndexedDB error:', event.target.error);
+                    reject(event.target.error);
+                };
+            });
+        }
+
+        function dbGetAllArchives() {
+            return new Promise((resolve, reject) => {
+                const tx = dbInstance.transaction(DB_CONFIG.storeName, 'readonly');
+                const store = tx.objectStore(DB_CONFIG.storeName);
+                const req = store.getAll();
+                req.onsuccess = () => resolve(req.result || []);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        function dbSaveArchive(record) {
+            return new Promise((resolve, reject) => {
+                const tx = dbInstance.transaction(DB_CONFIG.storeName, 'readwrite');
+                const store = tx.objectStore(DB_CONFIG.storeName);
+                const req = store.put(record);
+                req.onsuccess = () => resolve();
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        function dbDeleteArchive(id) {
+            return new Promise((resolve, reject) => {
+                const tx = dbInstance.transaction(DB_CONFIG.storeName, 'readwrite');
+                const store = tx.objectStore(DB_CONFIG.storeName);
+                const req = store.delete(id);
+                req.onsuccess = () => resolve();
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        // ==================== UTILITAS UI & FORMAT ====================
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const styles = {
+                success: 'bg-walhi-800 text-white border-walhi-600',
+                error: 'bg-red-600 text-white border-red-500',
+                info: 'bg-slate-800 text-white border-slate-600'
+            };
+
+            const icons = {
+                success: 'check-circle-2',
+                error: 'alert-circle',
+                info: 'info'
+            };
+
+            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-sm font-medium fade-in ${styles[type] || styles.info}`;
+            toast.innerHTML = `
+                <i data-lucide="${icons[type] || 'info'}" class="w-4 h-4 shrink-0"></i>
+                <span class="flex-1">${escapeHtml(message)}</span>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons({ nodes: [toast] });
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-6px)';
+                toast.style.transition = 'all 0.25s ease';
+                setTimeout(() => toast.remove(), 250);
+            }, 3500);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function formatFileSize(bytes) {
+            if (!bytes || bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function formatDateIndo(dateStr) {
+            if (!dateStr) return '-';
+            try {
+                const [year, month, day] = dateStr.split('-');
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                return `${parseInt(day, 10)} ${months[parseInt(month, 10) - 1]} ${year}`;
+            } catch {
+                return dateStr;
+            }
+        }
+
+        function getDepartmentBadgeHtml(dept) {
+            const map = {
+                'Departemen Manajemen Pengetahuan dan Database': {
+                    bg: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+                    dot: 'bg-emerald-500',
+                    short: 'Manajemen Pengetahuan & Database'
+                },
+                'Departemen Advokasi dan Kampanye': {
+                    bg: 'bg-amber-50 text-amber-800 border-amber-200',
+                    dot: 'bg-amber-500',
+                    short: 'Advokasi & Kampanye'
+                },
+                'Departemen Pengembangan Program': {
+                    bg: 'bg-sky-50 text-sky-800 border-sky-200',
+                    dot: 'bg-sky-500',
+                    short: 'Pengembangan Program'
+                },
+                'Departemen Keuangan': {
+                    bg: 'bg-purple-50 text-purple-800 border-purple-200',
+                    dot: 'bg-purple-500',
+                    short: 'Keuangan'
+                }
+            };
+            const item = map[dept] || { bg: 'bg-slate-100 text-slate-700 border-slate-200', dot: 'bg-slate-500', short: dept };
+            return `
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border ${item.bg}">
+                    <span class="w-1.5 h-1.5 rounded-full ${item.dot}"></span>
+                    <span>${escapeHtml(item.short)}</span>
+                </span>
+            `;
+        }
+
+        // ==================== SISTEM AUTENTIKASI ====================
+        function checkAuthSession() {
+            const localAuth = localStorage.getItem(AUTH_CONFIG.sessionKey);
+            const sessionAuth = sessionStorage.getItem(AUTH_CONFIG.sessionKey);
+            return localAuth === 'authenticated' || sessionAuth === 'authenticated';
+        }
+
+        function showAppView() {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('app-view').classList.remove('hidden');
+            loadAndRenderArchives();
+        }
+
+        function showLoginView() {
+            document.getElementById('app-view').classList.add('hidden');
+            document.getElementById('login-view').classList.remove('hidden');
+            document.getElementById('login-form').reset();
+            document.getElementById('login-error').classList.add('hidden');
+        }
+
+        // ==================== RENDERING DATA & STATISTIK ====================
+        async function loadAndRenderArchives() {
+            try {
+                allArchives = await dbGetAllArchives();
+                // Urutkan terbaru berdasarkan tanggal dokumen, lalu waktu unggah
+                allArchives.sort((a, b) => {
+                    if (b.date !== a.date) return (b.date || '').localeCompare(a.date || '');
+                    return (b.createdAt || 0) - (a.createdAt || 0);
+                });
+                updateStatistics();
+                renderArchiveList();
+            } catch (err) {
+                showToast('Gagal memuat daftar arsip dari browser.', 'error');
+            }
+        }
+
+        function updateStatistics() {
+            document.getElementById('stat-total').textContent = allArchives.length;
+            document.getElementById('stat-dept-1').textContent = allArchives.filter(d => d.department === DEPARTMENTS[0]).length;
+            document.getElementById('stat-dept-2').textContent = allArchives.filter(d => d.department === DEPARTMENTS[1]).length;
+            document.getElementById('stat-dept-3').textContent = allArchives.filter(d => d.department === DEPARTMENTS[2]).length;
+            document.getElementById('stat-dept-4').textContent = allArchives.filter(d => d.department === DEPARTMENTS[3]).length;
+
+            const totalBytes = allArchives.reduce((acc, item) => acc + (item.fileSize || 0), 0);
+            document.getElementById('storage-size-text').textContent = `${formatFileSize(totalBytes)} Terpakai`;
+        }
+
+        function getFilteredArchives() {
+            const query = document.getElementById('search-input').value.trim().toLowerCase();
+            const deptFilter = document.getElementById('filter-department').value;
+            const periodFilter = document.getElementById('filter-period').value; // Format: YYYY-MM
+
+            return allArchives.filter(doc => {
+                const matchesDept = deptFilter === 'ALL' || doc.department === deptFilter;
+                const matchesPeriod = !periodFilter || (doc.date && doc.date.startsWith(periodFilter));
+                const matchesQuery = !query || 
+                    (doc.title && doc.title.toLowerCase().includes(query)) ||
+                    (doc.docNumber && doc.docNumber.toLowerCase().includes(query)) ||
+                    (doc.description && doc.description.toLowerCase().includes(query)) ||
+                    (doc.fileName && doc.fileName.toLowerCase().includes(query));
+
+                return matchesDept && matchesPeriod && matchesQuery;
+            });
+        }
+
+        function renderArchiveList() {
+            const filtered = getFilteredArchives();
+            const tbody = document.getElementById('archive-table-body');
+            const cardsContainer = document.getElementById('archive-cards-container');
+            const emptyState = document.getElementById('empty-state');
+            const countBadge = document.getElementById('filtered-count-badge');
+
+            countBadge.textContent = `${filtered.length} dokumen`;
+            tbody.innerHTML = '';
+            cardsContainer.innerHTML = '';
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            filtered.forEach(doc => {
+                // 1. Baris Tabel Desktop
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-walhi-50/40 transition group';
+                tr.innerHTML = `
+                    <td class="py-4 px-5 max-w-md">
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-red-50 text-red-600 border border-red-100 flex items-center justify-center shrink-0 mt-0.5">
+                                <i data-lucide="file-text" class="w-4 h-4"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="font-bold text-slate-800 group-hover:text-walhi-800 transition truncate" title="${escapeHtml(doc.title)}">
+                                    ${escapeHtml(doc.title)}
+                                </p>
+                                <div class="flex items-center gap-2 mt-0.5 text-xs text-slate-500">
+                                    <span class="font-mono font-semibold text-walhi-700 bg-walhi-50 px-1.5 py-0.5 rounded">${escapeHtml(doc.docNumber)}</span>
+                                    <span class="truncate">${escapeHtml(doc.description || 'Tanpa keterangan tambahan')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 whitespace-nowrap">
+                        ${getDepartmentBadgeHtml(doc.department)}
+                    </td>
+                    <td class="py-4 px-4 whitespace-nowrap text-xs font-medium text-slate-600">
+                        ${formatDateIndo(doc.date)}
+                    </td>
+                    <td class="py-4 px-4 whitespace-nowrap text-xs text-slate-500">
+                        ${formatFileSize(doc.fileSize)}
+                    </td>
+                    <td class="py-4 px-5 whitespace-nowrap text-right">
+                        <div class="inline-flex items-center justify-end gap-1.5">
+                            <button type="button" onclick="previewArchive('${doc.id}')" title="Pratinjau PDF"
+                                class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-walhi-50 hover:bg-walhi-700 text-walhi-700 hover:text-white text-xs font-semibold border border-walhi-200 transition">
+                                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                                <span>Lihat</span>
+                            </button>
+                            <button type="button" onclick="downloadArchive('${doc.id}')" title="Unduh File PDF"
+                                class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                            </button>
+                            <button type="button" onclick="promptDeleteArchive('${doc.id}')" title="Hapus Arsip"
+                                class="p-1.5 rounded-lg bg-red-50 hover:bg-red-600 text-red-600 hover:text-white transition">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+
+                // 2. Kartu Mobile / Tablet
+                const card = document.createElement('div');
+                card.className = 'p-4 space-y-3 hover:bg-slate-50/80 transition';
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex items-start gap-3 min-w-0">
+                            <div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 border border-red-100 flex items-center justify-center shrink-0">
+                                <i data-lucide="file-text" class="w-5 h-5"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h4 class="font-bold text-slate-800 text-sm leading-snug">${escapeHtml(doc.title)}</h4>
+                                <p class="text-xs font-mono font-semibold text-walhi-700 mt-0.5">${escapeHtml(doc.docNumber)}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        ${getDepartmentBadgeHtml(doc.department)}
+                        <span class="text-xs text-slate-500">&bull; ${formatDateIndo(doc.date)}</span>
+                        <span class="text-xs text-slate-400">&bull; ${formatFileSize(doc.fileSize)}</span>
+                    </div>
+                    ${doc.description ? `<p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">${escapeHtml(doc.description)}</p>` : ''}
+                    <div class="flex items-center gap-2 pt-1">
+                        <button type="button" onclick="previewArchive('${doc.id}')"
+                            class="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-walhi-700 hover:bg-walhi-800 text-white text-xs font-semibold transition">
+                            <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                            <span>Pratinjau PDF</span>
+                        </button>
+                        <button type="button" onclick="downloadArchive('${doc.id}')"
+                            class="py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition inline-flex items-center gap-1">
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                            <span>Unduh</span>
+                        </button>
+                        <button type="button" onclick="promptDeleteArchive('${doc.id}')"
+                            class="py-2 px-3 rounded-xl bg-red-50 hover:bg-red-600 text-red-600 hover:text-white text-xs font-semibold transition">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                `;
+                cardsContainer.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        // ==================== AKSI DOKUMEN (PREVIEW, DOWNLOAD, DELETE) ====================
+        function dataUrlToBlob(dataUrl) {
+            const parts = dataUrl.split(',');
+            const mime = parts[0].match(/:(.*?);/)[1];
+            const binary = atob(parts[1]);
+            const array = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                array[i] = binary.charCodeAt(i);
+            }
+            return new Blob([array], { type: mime });
+        }
+
+        function getArchiveBlob(doc) {
+            if (doc.fileBlob instanceof Blob) {
+                return doc.fileBlob;
+            }
+            if (doc.fileDataUrl) {
+                return dataUrlToBlob(doc.fileDataUrl);
+            }
+            return null;
+        }
+
+        window.previewArchive = function(id) {
+            const doc = allArchives.find(item => item.id === id);
+            if (!doc) return;
+
+            const blob = getArchiveBlob(doc);
+            if (!blob) {
+                showToast('File PDF tidak ditemukan atau rusak.', 'error');
+                return;
+            }
+
+            if (currentPreviewObjectUrl) {
+                URL.revokeObjectURL(currentPreviewObjectUrl);
+            }
+
+            currentPreviewDoc = doc;
+            currentPreviewObjectUrl = URL.createObjectURL(blob);
+
+            document.getElementById('preview-dept-badge').textContent = doc.department;
+            document.getElementById('preview-doc-number').textContent = doc.docNumber;
+            document.getElementById('preview-doc-title').textContent = doc.title;
+            document.getElementById('preview-doc-desc').textContent = doc.description || 'Tidak ada keterangan tambahan.';
+            document.getElementById('preview-doc-date').textContent = `Tanggal Dokumen: ${formatDateIndo(doc.date)}`;
+
+            const iframe = document.getElementById('pdf-viewer-frame');
+            const openNewTab = document.getElementById('pdf-open-newtab');
+            iframe.src = currentPreviewObjectUrl;
+            openNewTab.href = currentPreviewObjectUrl;
+
+            document.getElementById('preview-modal').classList.remove('hidden');
+        };
+
+        window.downloadArchive = function(id) {
+            const doc = allArchives.find(item => item.id === id);
+            if (!doc) return;
+
+            const blob = getArchiveBlob(doc);
+            if (!blob) {
+                showToast('File PDF tidak dapat diunduh.', 'error');
+                return;
+            }
+
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const safeTitle = doc.title.replace(/[^a-z0-9\-_]/gi, '_').substring(0, 60);
+            a.href = url;
+            a.download = doc.fileName || `${safeTitle}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            showToast('Mengunduh dokumen PDF...', 'info');
+        };
+
+        window.promptDeleteArchive = function(id) {
+            const doc = allArchives.find(item => item.id === id);
+            if (!doc) return;
+            pendingDeleteId = id;
+            document.getElementById('delete-doc-name').textContent = `"${doc.title}" (${doc.docNumber})`;
+            document.getElementById('delete-modal').classList.remove('hidden');
+        };
+
+        // ==================== BACKUP & RESTORE JSON (UNTUK GITHUB PAGES) ====================
+        function blobToDataUrl(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        }
+
+        async function exportBackupJson() {
+            if (allArchives.length === 0) {
+                showToast('Belum ada arsip untuk dicadangkan.', 'info');
+                return;
+            }
+
+            try {
+                showToast('Menyiapkan file backup JSON...', 'info');
+                const serializedArchives = [];
+
+                for (const item of allArchives) {
+                    let dataUrl = item.fileDataUrl;
+                    if (!dataUrl && item.fileBlob instanceof Blob) {
+                        dataUrl = await blobToDataUrl(item.fileBlob);
+                    }
+                    serializedArchives.push({
+                        id: item.id,
+                        title: item.title,
+                        docNumber: item.docNumber,
+                        date: item.date,
+                        department: item.department,
+                        description: item.description,
+                        fileName: item.fileName,
+                        fileSize: item.fileSize,
+                        createdAt: item.createdAt,
+                        fileDataUrl: dataUrl
+                    });
+                }
+
+                const backupPayload = {
+                    app: 'WALHI MALUT E-Arsip',
+                    version: '1.0',
+                    exportedAt: new Date().toISOString(),
+                    totalDocuments: serializedArchives.length,
+                    archives: serializedArchives
+                };
+
+                const jsonBlob = new Blob([JSON.stringify(backupPayload)], { type: 'application/json' });
+                const url = URL.createObjectURL(jsonBlob);
+                const dateStamp = new Date().toISOString().slice(0, 10);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Backup_Arsip_WALHI_MALUT_${dateStamp}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+                showToast(`Berhasil mencadangkan ${serializedArchives.length} dokumen arsip!`, 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('Gagal mengekspor data backup.', 'error');
+            }
+        }
+
+        async function importBackupJson(file) {
+            if (!file) return;
+            try {
+                const text = await file.text();
+                const parsed = JSON.parse(text);
+
+                if (!parsed || !Array.isArray(parsed.archives)) {
+                    throw new Error('Format file JSON tidak valid.');
+                }
+
+                let importedCount = 0;
+                for (const item of parsed.archives) {
+                    if (!item.id || !item.title || !item.department) continue;
+                    const blob = item.fileDataUrl ? dataUrlToBlob(item.fileDataUrl) : null;
+                    await dbSaveArchive({
+                        id: item.id,
+                        title: item.title,
+                        docNumber: item.docNumber || '-',
+                        date: item.date || new Date().toISOString().slice(0, 10),
+                        department: item.department,
+                        description: item.description || '',
+                        fileName: item.fileName || 'dokumen.pdf',
+                        fileSize: item.fileSize || (blob ? blob.size : 0),
+                        createdAt: item.createdAt || Date.now(),
+                        fileBlob: blob
+                    });
+                    importedCount++;
+                }
+
+                await loadAndRenderArchives();
+                showToast(`Berhasil memulihkan ${importedCount} dokumen dari backup!`, 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('File backup tidak valid atau gagal dipulihkan.', 'error');
+            }
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        document.addEventListener('DOMContentLoaded', async () => {
+            lucide.createIcons();
+
+            // Inisialisasi IndexedDB
+            try {
+                await initDatabase();
+            } catch (e) {
+                showToast('Browser tidak mendukung IndexedDB untuk penyimpanan arsip.', 'error');
+            }
+
+            // Cek status login
+            if (checkAuthSession()) {
+                showAppView();
+            } else {
+                showLoginView();
+            }
+
+            // Toggle lihat/sembunyikan password
+            const togglePasswordBtn = document.getElementById('toggle-password');
+            const passwordInput = document.getElementById('password');
+            togglePasswordBtn.addEventListener('click', () => {
+                const isPassword = passwordInput.type === 'password';
+                passwordInput.type = isPassword ? 'text' : 'password';
+                togglePasswordBtn.innerHTML = `<i data-lucide="${isPassword ? 'eye-off' : 'eye'}" class="w-4 h-4"></i>`;
+                lucide.createIcons({ nodes: [togglePasswordBtn] });
+            });
+
+            // Submit Form Login
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const usernameVal = document.getElementById('username').value.trim();
+                const passwordVal = document.getElementById('password').value;
+                const remember = document.getElementById('remember-session').checked;
+                const errorBox = document.getElementById('login-error');
+
+                if (usernameVal === AUTH_CONFIG.username && passwordVal === AUTH_CONFIG.password) {
+                    errorBox.classList.add('hidden');
+                    if (remember) {
+                        localStorage.setItem(AUTH_CONFIG.sessionKey, 'authenticated');
+                    } else {
+                        sessionStorage.setItem(AUTH_CONFIG.sessionKey, 'authenticated');
+                    }
+                    showToast('Selamat datang di Sistem Arsip WALHI MALUT!', 'success');
+                    showAppView();
+                } else {
+                    errorBox.classList.remove('hidden');
+                    document.getElementById('login-error-text').textContent = 'Username atau password salah. Silakan periksa kembali kredensial Anda.';
+                }
+            });
+
+            // Logout
+            document.getElementById('btn-logout').addEventListener('click', () => {
+                localStorage.removeItem(AUTH_CONFIG.sessionKey);
+                sessionStorage.removeItem(AUTH_CONFIG.sessionKey);
+                showLoginView();
+                showToast('Anda telah keluar dari sistem.', 'info');
+            });
+
+            // Filter & Pencarian
+            document.getElementById('search-input').addEventListener('input', renderArchiveList);
+            document.getElementById('filter-department').addEventListener('change', renderArchiveList);
+            document.getElementById('filter-period').addEventListener('change', renderArchiveList);
+
+            document.getElementById('btn-reset-filter').addEventListener('click', () => {
+                document.getElementById('search-input').value = '';
+                document.getElementById('filter-department').value = 'ALL';
+                document.getElementById('filter-period').value = '';
+                renderArchiveList();
+            });
+
+            // Klik Kartu Statistik untuk filter cepat departemen
+            document.querySelectorAll('.stat-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const dept = card.getAttribute('data-filter-dept');
+                    document.getElementById('filter-department').value = dept;
+                    renderArchiveList();
+                });
+            });
+
+            // Modal Upload Controls
+            const uploadModal = document.getElementById('upload-modal');
+            const openUploadModal = () => {
+                document.getElementById('upload-form').reset();
+                document.getElementById('doc-date').value = new Date().toISOString().slice(0, 10);
+                clearSelectedPdf();
+                uploadModal.classList.remove('hidden');
+            };
+            const closeUploadModal = () => uploadModal.classList.add('hidden');
+
+            document.getElementById('btn-open-upload-modal').addEventListener('click', openUploadModal);
+            document.getElementById('btn-empty-upload').addEventListener('click', openUploadModal);
+            document.getElementById('btn-close-upload-modal').addEventListener('click', closeUploadModal);
+            document.getElementById('btn-cancel-upload').addEventListener('click', closeUploadModal);
+
+            // Drag & Drop / Pilih File PDF
+            const dropzone = document.getElementById('pdf-dropzone');
+            const fileInput = document.getElementById('doc-file');
+
+            function handlePdfSelection(file) {
+                if (!file) return;
+                const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+                if (!isPdf) {
+                    showToast('Hanya file dengan format PDF (.pdf) yang diperbolehkan!', 'error');
+                    return;
+                }
+                selectedPdfFile = file;
+                document.getElementById('selected-file-name').textContent = file.name;
+                document.getElementById('selected-file-size').textContent = formatFileSize(file.size);
+                document.getElementById('dropzone-placeholder').classList.add('hidden');
+                document.getElementById('dropzone-selected').classList.remove('hidden');
+            }
+
+            function clearSelectedPdf() {
+                selectedPdfFile = null;
+                fileInput.value = '';
+                document.getElementById('dropzone-placeholder').classList.remove('hidden');
+                document.getElementById('dropzone-selected').classList.add('hidden');
+            }
+
+            dropzone.addEventListener('click', (e) => {
+                if (e.target.closest('#btn-remove-selected-file')) return;
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    handlePdfSelection(e.target.files[0]);
+                }
+            });
+
+            document.getElementById('btn-remove-selected-file').addEventListener('click', (e) => {
+                e.stopPropagation();
+                clearSelectedPdf();
+            });
+
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.classList.add('border-walhi-600', 'bg-walhi-50');
+            });
+
+            dropzone.addEventListener('dragleave', () => {
+                dropzone.classList.remove('border-walhi-600', 'bg-walhi-50');
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('border-walhi-600', 'bg-walhi-50');
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    handlePdfSelection(e.dataTransfer.files[0]);
+                }
+            });
+
+            // Submit Simpan Arsip PDF
+            document.getElementById('upload-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const title = document.getElementById('doc-title').value.trim();
+                const docNumber = document.getElementById('doc-number').value.trim();
+                const date = document.getElementById('doc-date').value;
+                const department = document.getElementById('doc-department').value;
+                const description = document.getElementById('doc-description').value.trim();
+
+                if (!title || !docNumber || !date || !department) {
+                    showToast('Mohon lengkapi semua kolom wajib bertanda bintang (*).', 'error');
+                    return;
+                }
+
+                if (!selectedPdfFile) {
+                    showToast('Silakan pilih file dokumen PDF terlebih dahulu.', 'error');
+                    return;
+                }
+
+                const submitBtn = document.getElementById('btn-submit-upload');
+                submitBtn.disabled = true;
+
+                try {
+                    const newArchive = {
+                        id: 'arsip_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+                        title,
+                        docNumber,
+                        date,
+                        department,
+                        description,
+                        fileName: selectedPdfFile.name,
+                        fileSize: selectedPdfFile.size,
+                        fileBlob: selectedPdfFile,
+                        createdAt: Date.now()
+                    };
+
+                    await dbSaveArchive(newArchive);
+                    closeUploadModal();
+                    await loadAndRenderArchives();
+                    showToast('Dokumen PDF berhasil disimpan ke arsip WALHI MALUT!', 'success');
+                } catch (err) {
+                    console.error(err);
+                    showToast('Terjadi kesalahan saat menyimpan dokumen PDF.', 'error');
+                } finally {
+                    submitBtn.disabled = false;
+                }
+            });
+
+            // Kontrol Modal Preview PDF
+            document.getElementById('btn-close-preview-modal').addEventListener('click', () => {
+                document.getElementById('preview-modal').classList.add('hidden');
+                document.getElementById('pdf-viewer-frame').src = 'about:blank';
+                if (currentPreviewObjectUrl) {
+                    URL.revokeObjectURL(currentPreviewObjectUrl);
+                    currentPreviewObjectUrl = null;
+                }
+            });
+
+            document.getElementById('btn-preview-download').addEventListener('click', () => {
+                if (currentPreviewDoc) {
+                    downloadArchive(currentPreviewDoc.id);
+                }
+            });
+
+            // Kontrol Modal Hapus
+            document.getElementById('btn-cancel-delete').addEventListener('click', () => {
+                pendingDeleteId = null;
+                document.getElementById('delete-modal').classList.add('hidden');
+            });
+
+            document.getElementById('btn-confirm-delete').addEventListener('click', async () => {
+                if (!pendingDeleteId) return;
+                try {
+                    await dbDeleteArchive(pendingDeleteId);
+                    pendingDeleteId = null;
+                    document.getElementById('delete-modal').classList.add('hidden');
+                    await loadAndRenderArchives();
+                    showToast('Dokumen arsip berhasil dihapus.', 'success');
+                } catch (err) {
+                    showToast('Gagal menghapus dokumen arsip.', 'error');
+                }
+            });
+
+            // Kontrol Backup & Restore JSON
+            document.getElementById('btn-export-backup').addEventListener('click', exportBackupJson);
+            document.getElementById('input-import-backup').addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    importBackupJson(e.target.files[0]);
+                    e.target.value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
