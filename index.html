@@ -29,57 +29,50 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- ================= AUTHENTICATION / LOGIN VIEW ================= -->
+    <!-- ================= AUTHENTICATION / LOGIN VIEW (TANPA USERNAME & PASSWORD) ================= -->
     <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center bg-walhi-900/80 backdrop-blur-sm p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border border-walhi-100 transform transition-all">
-            <div class="text-center mb-6">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-walhi-100 text-walhi-700 rounded-full text-2xl mb-3 shadow-inner">
-                    <i class="fa-solid fa-tree"></i>
-                </div>
-                <h1 class="text-2xl font-bold text-slate-900">WALHI MALUT</h1>
-                <p class="text-sm text-slate-500 mt-1">Sistem Pengarsipan Dokumen & Database Terpadu</p>
-                <div id="invite-alert" class="hidden mt-3 p-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs rounded-lg">
-                    <i class="fa-solid fa-circle-check mr-1"></i> Anda bergabung melalui tautan undangan khusus.
-                </div>
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border border-walhi-100 transform transition-all text-center">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-walhi-100 text-walhi-700 rounded-full text-3xl mb-4 shadow-inner">
+                <i class="fa-solid fa-tree"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-slate-900">WALHI MALUT</h1>
+            <p class="text-sm text-slate-500 mt-1 mb-6">Sistem Pengarsipan Dokumen & Database Terpadu</p>
+            
+            <div id="invite-alert" class="hidden mb-6 p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs rounded-xl text-left">
+                <i class="fa-solid fa-circle-check mr-1"></i> Anda bergabung melalui tautan undangan khusus departemen.
             </div>
 
-            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Username / Akun</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-                            <i class="fa-solid fa-user"></i>
-                        </span>
-                        <input type="text" id="login-username" required placeholder="Masukkan username..." 
-                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-600 focus:bg-white transition">
-                    </div>
+            <div class="space-y-3">
+                <button onclick="loginAsSuperAdmin()" class="w-full bg-walhi-700 hover:bg-walhi-800 text-white font-medium py-3 rounded-xl shadow-lg shadow-walhi-700/20 transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Masuk sebagai Super Admin</span>
+                </button>
+
+                <div class="relative flex py-2 items-center">
+                    <div class="flex-grow border-t border-slate-200"></div>
+                    <span class="flex-shrink mx-4 text-slate-400 text-xs uppercase tracking-wider">Atau Pilih Departemen</span>
+                    <div class="flex-grow border-t border-slate-200"></div>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Password</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-                            <i class="fa-solid fa-lock"></i>
-                        </span>
-                        <input type="password" id="login-password" required placeholder="••••••••••••" 
-                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-600 focus:bg-white transition">
-                    </div>
-                </div>
-
-                <div class="pt-2">
-                    <button type="submit" class="w-full bg-walhi-700 hover:bg-walhi-800 text-white font-medium py-2.5 rounded-xl shadow-lg shadow-walhi-700/20 transition flex items-center justify-center space-x-2">
-                        <span>Masuk ke Sistem</span>
-                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                <div class="grid grid-cols-1 gap-2 text-left">
+                    <button onclick="loginAsDept('Manajemen Pengetahuan dan Database')" class="p-3 bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-walhi-600 rounded-xl text-xs font-semibold text-slate-700 transition flex items-center justify-between">
+                        <span class="flex items-center"><i class="fa-solid fa-database text-blue-600 mr-2"></i> Manajemen Pengetahuan & Database</span>
+                        <i class="fa-solid fa-chevron-right text-slate-400"></i>
+                    </button>
+                    <button onclick="loginAsDept('Advokasi dan Kampanye')" class="p-3 bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-walhi-600 rounded-xl text-xs font-semibold text-slate-700 transition flex items-center justify-between">
+                        <span class="flex items-center"><i class="fa-solid fa-bullhorn text-amber-600 mr-2"></i> Advokasi dan Kampanye</span>
+                        <i class="fa-solid fa-chevron-right text-slate-400"></i>
+                    </button>
+                    <button onclick="loginAsDept('Pengembangan Program')" class="p-3 bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-walhi-600 rounded-xl text-xs font-semibold text-slate-700 transition flex items-center justify-between">
+                        <span class="flex items-center"><i class="fa-solid fa-diagram-project text-purple-600 mr-2"></i> Pengembangan Program</span>
+                        <i class="fa-solid fa-chevron-right text-slate-400"></i>
+                    </button>
+                    <button onclick="loginAsDept('Keuangan')" class="p-3 bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-walhi-600 rounded-xl text-xs font-semibold text-slate-700 transition flex items-center justify-between">
+                        <span class="flex items-center"><i class="fa-solid fa-wallet text-emerald-600 mr-2"></i> Keuangan</span>
+                        <i class="fa-solid fa-chevron-right text-slate-400"></i>
                     </button>
                 </div>
-
-                <div class="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-500 space-y-1">
-                    <p class="font-semibold text-slate-700"><i class="fa-solid fa-circle-info mr-1 text-walhi-600"></i> Info Kredensial Super Admin:</p>
-                    <p>• Username: <code class="bg-white px-1.5 py-0.5 rounded border border-slate-200 text-slate-700 font-mono">Walhi2026malut</code></p>
-                    <p>• Password: <code class="bg-white px-1.5 py-0.5 rounded border border-slate-200 text-slate-700 font-mono">lestari2026</code></p>
-                    <p class="pt-1 text-[11px] text-slate-400">*Atau gunakan akun departemen yang telah didaftarkan melalui menu undang.</p>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 
@@ -129,7 +122,7 @@
                 <div>
                     <span class="bg-walhi-700 text-emerald-100 text-[11px] font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider inline-block mb-2">Portal Resmi Wilayah Maluku Utara</span>
                     <h3 class="text-2xl font-bold">Pusat Arsip Dokumen & Database</h3>
-                    <p class="text-emerald-100/80 text-sm mt-1 max-w-2xl">Seluruh dokumen PDF dari berbagai departemen tersimpan aman, terstruktur, dan dapat diakses bersama secara real-time.</p>
+                    <p class="text-emerald-100/80 text-sm mt-1 max-w-2xl">Seluruh dokumen PDF dari ke-4 departemen tersimpan dalam database bersama yang transparan dan dapat diakses oleh semua pihak.</p>
                 </div>
                 <button onclick="openUploadModal()" class="whitespace-nowrap bg-white text-walhi-900 hover:bg-emerald-50 font-semibold px-5 py-3 rounded-xl shadow-md transition flex items-center space-x-2">
                     <i class="fa-solid fa-cloud-arrow-up text-walhi-700 text-lg"></i>
@@ -213,8 +206,8 @@
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                 <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
                     <div>
-                        <h4 class="font-bold text-slate-900">Daftar Arsip & Dokumen PDF</h4>
-                        <p class="text-xs text-slate-500">Semua file yang diposting dapat dilihat oleh seluruh departemen</p>
+                        <h4 class="font-bold text-slate-900">Daftar Arsip & Dokumen PDF Lintas Departemen</h4>
+                        <p class="text-xs text-slate-500">Semua file arsip tersimpan dalam database publik yang dapat dilihat oleh seluruh user</p>
                     </div>
                     <span id="archive-total-badge" class="text-xs font-semibold bg-walhi-50 text-walhi-700 px-3 py-1 rounded-full border border-walhi-100">Total: 0 Dokumen</span>
                 </div>
@@ -250,12 +243,12 @@
             <form id="upload-form" onsubmit="handleUploadSubmit(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Judul Dokumen / Arsip</label>
-                    <input type="text" id="doc-title" required placeholder="Contoh: Laporan Keuangan Q1 2026..." 
+                    <input type="text" id="doc-title" required placeholder="Contoh: Laporan Kajian Ekologis 2026..." 
                         class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-600 focus:bg-white transition">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Departemen Pengunggah</label>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Pilih Departemen Pengunggah</label>
                     <select id="doc-department" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-walhi-600 focus:bg-white transition">
                         <option value="Manajemen Pengetahuan dan Database">Manajemen Pengetahuan dan Database</option>
                         <option value="Advokasi dan Kampanye">Advokasi dan Kampanye</option>
@@ -290,7 +283,7 @@
                 <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800 flex items-start space-x-2">
                     <i class="fa-solid fa-clock mt-0.5 text-amber-600"></i>
                     <div>
-                        <span class="font-semibold">Waktu Posting Otomatis:</span> Tanggal dan jam posting akan dicatat secara otomatis menggunakan zona waktu WIT (Maluku Utara).
+                        <span class="font-semibold">Waktu & Transparansi:</span> Arsip yang di-posting akan otomatis tersimpan dalam database bersama dan dapat langsung dilihat oleh departemen lain.
                     </div>
                 </div>
 
@@ -313,7 +306,7 @@
                     <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
                         <i class="fa-brands fa-whatsapp"></i>
                     </div>
-                    <h3 class="font-bold text-slate-900 text-lg">Undang User via WhatsApp</h3>
+                    <h3 class="font-bold text-slate-900 text-lg">Undang Anggota via WhatsApp</h3>
                 </div>
                 <button onclick="closeInviteModal()" class="text-slate-400 hover:text-slate-600 p-1">
                     <i class="fa-solid fa-xmark text-lg"></i>
@@ -322,7 +315,7 @@
 
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Pilih Departemen User Baru</label>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Pilih Departemen Anggota</label>
                     <select id="invite-dept" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-walhi-600">
                         <option value="Manajemen Pengetahuan dan Database">Manajemen Pengetahuan dan Database</option>
                         <option value="Advokasi dan Kampanye">Advokasi dan Kampanye</option>
@@ -332,19 +325,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Buat Username User</label>
-                    <input type="text" id="invite-username" placeholder="Contoh: staff_keuangan01" 
-                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-600">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Buat Password User</label>
-                    <input type="text" id="invite-password" placeholder="Contoh: walhi2026rahasia" 
-                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-walhi-600">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Tautan Akses Undangan</label>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Tautan Akses Cepat</label>
                     <div class="flex space-x-2">
                         <input type="text" id="invite-link-output" readonly class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs font-mono text-slate-600">
                         <button onclick="copyInviteLink()" class="px-3 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-medium transition" title="Salin Tautan">
@@ -356,7 +337,7 @@
                 <div class="pt-2">
                     <button onclick="sendToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center justify-center space-x-2">
                         <i class="fa-brands fa-whatsapp text-lg"></i>
-                        <span>Kirim Undangan via WhatsApp</span>
+                        <span>Bagikan Tautan ke WhatsApp</span>
                     </button>
                 </div>
             </div>
@@ -365,7 +346,6 @@
 
     <!-- ================= SCRIPT LOGIC ================= -->
     <script>
-        // Inisialisasi Database IndexedDB untuk penyimpanan file PDF yang stabil & besar
         let db;
         const dbName = "WalhiMalutArsipDB";
         const storeName = "archives";
@@ -373,10 +353,7 @@
         function initIndexedDB() {
             return new Promise((resolve, reject) => {
                 const request = indexedDB.open(dbName, 1);
-                request.onerror = (event) => {
-                    console.error("IndexedDB error:", event.target.error);
-                    reject(event.target.error);
-                };
+                request.onerror = (event) => reject(event.target.error);
                 request.onsuccess = (event) => {
                     db = event.target.result;
                     resolve(db);
@@ -390,18 +367,8 @@
             });
         }
 
-        // Data Session & Akun Bawaan
-        const SUPER_ADMIN = {
-            username: "Walhi2026malut",
-            password: "lestari2026",
-            name: "Super Admin",
-            role: "Super Admin",
-            department: "Semua Departemen"
-        };
-
         let currentUser = null;
 
-        // Cek URL Invitation saat load
         window.addEventListener('DOMContentLoaded', async () => {
             await initIndexedDB();
 
@@ -410,7 +377,6 @@
                 document.getElementById('invite-alert').classList.remove('hidden');
             }
 
-            // Cek session tersimpan
             const savedUser = sessionStorage.getItem('walhi_current_user');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
@@ -420,30 +386,25 @@
             generateInviteLinkText();
         });
 
-        // Handle Login
-        function handleLogin(e) {
-            e.preventDefault();
-            const u = document.getElementById('login-username').value.trim();
-            const p = document.getElementById('login-password').value.trim();
+        // Login satu klik tanpa password
+        function loginAsSuperAdmin() {
+            currentUser = {
+                name: "Super Admin",
+                role: "Super Admin",
+                department: "Semua Departemen"
+            };
+            sessionStorage.setItem('walhi_current_user', JSON.stringify(currentUser));
+            showMainDashboard();
+        }
 
-            if (u === SUPER_ADMIN.username && p === SUPER_ADMIN.password) {
-                currentUser = SUPER_ADMIN;
-                sessionStorage.setItem('walhi_current_user', JSON.stringify(currentUser));
-                showMainDashboard();
-                return;
-            }
-
-            // Cek apakah user departemen terdaftar di localStorage
-            const customUsers = JSON.parse(localStorage.getItem('walhi_custom_users') || '[]');
-            const foundUser = customUsers.find(item => item.username === u && item.password === p);
-
-            if (foundUser) {
-                currentUser = foundUser;
-                sessionStorage.setItem('walhi_current_user', JSON.stringify(currentUser));
-                showMainDashboard();
-            } else {
-                alert("Username atau Password salah! Silakan periksa kembali kredensial Anda.");
-            }
+        function loginAsDept(deptName) {
+            currentUser = {
+                name: "Staff " + deptName.split(" ")[0],
+                role: "User Departemen",
+                department: deptName
+            };
+            sessionStorage.setItem('walhi_current_user', JSON.stringify(currentUser));
+            showMainDashboard();
         }
 
         function handleLogout() {
@@ -451,27 +412,23 @@
             currentUser = null;
             document.getElementById('login-view').classList.remove('hidden');
             document.getElementById('main-view').classList.add('hidden');
-            document.getElementById('login-form').reset();
         }
 
         function showMainDashboard() {
             document.getElementById('login-view').classList.add('hidden');
             document.getElementById('main-view').classList.remove('hidden');
 
-            document.getElementById('current-user-name').innerText = currentUser.name || currentUser.username;
+            document.getElementById('current-user-name').innerText = currentUser.name;
             document.getElementById('current-user-role-badge').innerText = currentUser.role === 'Super Admin' ? 'Super Admin' : `Dept: ${currentUser.department}`;
-            document.getElementById('user-avatar-initial').innerText = (currentUser.name || currentUser.username).charAt(0).toUpperCase();
+            document.getElementById('user-avatar-initial').innerText = currentUser.name.charAt(0).toUpperCase();
 
-            // Jika user departemen, otomatis set default departemen di form upload
             if (currentUser.role !== 'Super Admin') {
-                const deptSelect = document.getElementById('doc-department');
-                deptSelect.value = currentUser.department;
+                document.getElementById('doc-department').value = currentUser.department;
             }
 
             loadAndRenderArchives();
         }
 
-        // Modal Upload Controls
         function openUploadModal() {
             document.getElementById('upload-modal').classList.remove('hidden');
             if (currentUser && currentUser.role !== 'Super Admin') {
@@ -486,12 +443,11 @@
 
         function updateFileName(input) {
             if (input.files && input.files[0]) {
-                const fileName = input.files[0].name;
-                document.getElementById('file-name-display').innerText = "File terpilih: " + fileName;
+                document.getElementById('file-name-display').innerText = "File terpilih: " + input.files[0].name;
             }
         }
 
-        // Handle Upload & Posting Arsip PDF ke IndexedDB
+        // Posting Arsip PDF ke Database Bersama
         async function handleUploadSubmit(e) {
             e.preventDefault();
             const title = document.getElementById('doc-title').value.trim();
@@ -512,7 +468,7 @@
 
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengunggah...`;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Menyimpan...`;
 
             const reader = new FileReader();
             reader.onload = async function(event) {
@@ -529,8 +485,8 @@
                     description: desc,
                     fileName: file.name,
                     fileData: base64Data,
-                    uploader: currentUser.name || currentUser.username,
-                    uploaderRole: currentUser.role || 'User Departemen',
+                    uploader: currentUser.name,
+                    uploaderRole: currentUser.role,
                     date: timestampWIT,
                     createdAt: new Date().getTime()
                 };
@@ -538,11 +494,11 @@
                 try {
                     await saveArchiveToDB(newArchive);
                     closeUploadModal();
-                    loadAndRenderArchives();
-                    alert("Arsip PDF berhasil diposting dan tersimpan di sistem!");
+                    await loadAndRenderArchives();
+                    alert("Arsip PDF berhasil diposting ke database bersama dan dapat dilihat oleh semua departemen!");
                 } catch (err) {
                     console.error(err);
-                    alert("Gagal menyimpan file ke database browser. Ukuran file mungkin terlalu besar.");
+                    alert("Gagal menyimpan file ke database browser.");
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = `<i class="fa-solid fa-upload"></i> <span>Posting Arsip Sekarang</span>`;
@@ -551,7 +507,6 @@
             reader.readAsDataURL(file);
         }
 
-        // IndexedDB Operations
         function saveArchiveToDB(archive) {
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction([storeName], "readwrite");
@@ -587,7 +542,6 @@
         async function loadAndRenderArchives() {
             try {
                 cachedArchives = await getAllArchivesFromDB();
-                // Urutkan dari terbaru
                 cachedArchives.sort((a, b) => b.createdAt - a.createdAt);
                 updateDepartmentCounts(cachedArchives);
                 renderArchives();
@@ -627,6 +581,7 @@
             renderArchives();
         }
 
+        // Render Arsip Publik (Semua departemen dapat melihat file satu sama lain)
         function renderArchives() {
             const searchQuery = document.getElementById('search-input').value.toLowerCase();
             const selectedDept = document.getElementById('filter-dept-select').value;
@@ -646,8 +601,8 @@
                 container.innerHTML = `
                     <div class="p-12 text-center text-slate-400">
                         <i class="fa-solid fa-folder-open text-4xl mb-3"></i>
-                        <p class="text-sm font-medium">Belum ada arsip dokumen PDF yang ditemukan.</p>
-                        <p class="text-xs mt-1">Silakan posting arsip baru atau ubah kata kunci pencarian Anda.</p>
+                        <p class="text-sm font-medium">Belum ada arsip dokumen PDF di database.</p>
+                        <p class="text-xs mt-1">Silakan posting arsip baru. File yang diposting otomatis bisa dilihat semua departemen.</p>
                     </div>
                 `;
                 return;
@@ -703,7 +658,7 @@
             if (confirm("Apakah Anda yakin ingin menghapus arsip dokumen PDF ini?")) {
                 try {
                     await deleteArchiveFromDB(id);
-                    loadAndRenderArchives();
+                    await loadAndRenderArchives();
                     alert("Arsip berhasil dihapus.");
                 } catch (err) {
                     console.error(err);
@@ -712,7 +667,6 @@
             }
         }
 
-        // Modal Undang WhatsApp Controls
         function openInviteModal() {
             document.getElementById('invite-modal').classList.remove('hidden');
             generateInviteLinkText();
@@ -723,43 +677,21 @@
 
         function generateInviteLinkText() {
             const baseUrl = window.location.href.split('?')[0];
-            const inviteLink = baseUrl + "?invite=walhi2026";
-            document.getElementById('invite-link-output').value = inviteLink;
+            document.getElementById('invite-link-output').value = baseUrl + "?invite=walhi2026";
         }
 
         function copyInviteLink() {
             const copyText = document.getElementById('invite-link-output');
             copyText.select();
             document.execCommand('copy');
-            alert("Tautan undangan berhasil disalin ke clipboard!");
+            alert("Tautan undangan berhasil disalin!");
         }
 
         function sendToWhatsApp() {
             const dept = document.getElementById('invite-dept').value;
-            const u = document.getElementById('invite-username').value.trim();
-            const p = document.getElementById('invite-password').value.trim();
             const link = document.getElementById('invite-link-output').value;
-
-            if (!u || !p) {
-                alert("Silakan isi Username dan Password untuk user yang akan diundang terlebih dahulu!");
-                return;
-            }
-
-            // Simpan akun custom ke localStorage agar bisa digunakan untuk login
-            let customUsers = JSON.parse(localStorage.getItem('walhi_custom_users') || '[]');
-            customUsers.push({
-                username: u,
-                password: p,
-                name: u,
-                role: "User Departemen",
-                department: dept
-            });
-            localStorage.setItem('walhi_custom_users', JSON.stringify(customUsers));
-
-            const message = `Halo rekan-rekan WALHI Maluku Utara,%0A%0AAnda diundang untuk bergabung ke Sistem Pengarsipan Digital WALHI MALUT untuk Departemen *${dept}*.%0A%0ASilakan gunakan kredensial berikut untuk masuk:%0A- Username: *${u}*%0A- Password: *${p}*%0A%0AAkses portal melalui tautan berikut:%0A${link}%0A%0ATerima kasih, Salam Lestari! 🌱`;
-            
-            const waUrl = `https://wa.me/?text=${message}`;
-            window.open(waUrl, '_blank');
+            const message = `Halo rekan-rekan WALHI Maluku Utara,%0A%0AAnda diundang untuk mengakses Sistem Pengarsipan Digital WALHI MALUT untuk Departemen *${dept}*.%0A%0ASilakan akses portal melalui tautan berikut:%0A${link}%0A%0ATerima kasih, Salam Lestari! 🌱`;
+            window.open(`https://wa.me/?text=${message}`, '_blank');
         }
 
         function escapeHtml(text) {
@@ -768,7 +700,7 @@
                        .replace(/</g, "&lt;")
                        .replace(/>/g, "&gt;")
                        .replace(/"/g, "&quot;")
-                       .replace(0, "&#039;");
+                       .replace(/'/g, "&#039;");
         }
     </script>
 </body>
