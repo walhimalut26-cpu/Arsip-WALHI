@@ -211,28 +211,23 @@
         <!-- Main Content -->
         <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
 
-            <!-- Info Banner GitHub Ready & Akses Bersama -->
-            <div class="bg-white rounded-2xl p-4 border border-walhi-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div class="flex items-start sm:items-center gap-3">
-                    <div class="p-2.5 rounded-xl bg-walhi-100 text-walhi-700 shrink-0">
-                        <i data-lucide="users" class="w-5 h-5"></i>
+            <!-- Info Banner GitHub Ready & Tombol Posting Mencolok -->
+            <div class="bg-gradient-to-r from-walhi-800 to-walhi-900 rounded-2xl p-6 text-white shadow-lg border border-walhi-700 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="space-y-2 text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-walhi-700/80 text-walhi-100 text-xs font-semibold">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                        <span>Dashboard Resmi Eksekutif Daerah Maluku Utara</span>
                     </div>
-                    <div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <h2 class="text-sm font-bold text-slate-800">Arsip Terpadu Seluruh Departemen WALHI MALUT</h2>
-                            <span id="user-role-badge" class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-walhi-100 text-walhi-800">
-                                Administrator
-                            </span>
-                        </div>
-                        <p class="text-xs text-slate-500 mt-0.5">
-                            Seluruh dokumen PDF yang diposting dari semua departemen dapat dilihat langsung oleh anggota. Gunakan <strong class="text-walhi-700">Backup JSON</strong> untuk sinkronisasi antar perangkat via GitHub/WhatsApp.
-                        </p>
-                    </div>
+                    <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">Sistem Pengarsipan Digital WALHI MALUT</h2>
+                    <p class="text-xs sm:text-sm text-walhi-200 max-w-2xl">
+                        Unggah dan kelola dokumen PDF dari 4 departemen utama. Seluruh arsip tersimpan aman di browser dan dapat dibagikan ke anggota melalui WhatsApp.
+                    </p>
                 </div>
+                <!-- Tombol Posting Utama yang Sangat Jelas dan Mencolok -->
                 <button onclick="openUploadModal()"
-                    class="w-full sm:w-auto shrink-0 px-5 py-2.5 bg-walhi-700 hover:bg-walhi-800 text-white text-sm font-semibold rounded-xl shadow-md shadow-walhi-700/20 transition flex items-center justify-center gap-2 cursor-pointer">
-                    <i data-lucide="file-plus-2" class="w-4 h-4"></i>
-                    <span>Posting Arsip PDF</span>
+                    class="shrink-0 px-6 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-walhi-950 font-extrabold text-sm sm:text-base rounded-xl shadow-xl shadow-emerald-500/30 transition transform hover:scale-105 flex items-center gap-2.5 cursor-pointer border-2 border-emerald-300">
+                    <i data-lucide="file-plus-2" class="w-5 h-5"></i>
+                    <span>+ Posting Arsip Baru</span>
                 </button>
             </div>
 
@@ -408,13 +403,13 @@
     </div>
 
     <!-- ==================== MODAL UPLOAD ARSIP PDF ==================== -->
-    <div id="upload-modal" class="hidden fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+    <div id="upload-modal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full border border-slate-200 overflow-hidden fade-in my-8">
             <!-- Modal Header -->
             <div class="bg-walhi-800 text-white px-6 py-4 flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
                     <i data-lucide="file-up" class="w-5 h-5 text-walhi-300"></i>
-                    <h3 class="font-bold text-base">Upload Dokumen Arsip (PDF)</h3>
+                    <h3 class="font-bold text-base">Upload Dokumen Arsip PDF</h3>
                 </div>
                 <button onclick="closeUploadModal()" class="text-walhi-200 hover:text-white p-1 rounded-lg transition cursor-pointer">
                     <i data-lucide="x" class="w-5 h-5"></i>
@@ -491,6 +486,58 @@
                 </div>
 
                 <!-- Keterangan Singkat -->
+                <div>
+                    <label for="doc-desc" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                        Keterangan / Catatan Dokumen (Opsional)
+                    </label>
+                    <textarea id="doc-desc" rows="3" placeholder="Tambahkan ringkasan atau keterangan dokumen..."
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-walhi-600 focus:ring-3 focus:ring-walhi-600/15 outline-none text-sm"></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-2 flex items-center justify-end gap-3">
+                    <button type="button" onclick="closeUploadModal()"
+                        class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm font-semibold transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" id="save-doc-btn"
+                        class="px-5 py-2.5 rounded-xl bg-walhi-700 hover:bg-walhi-800 text-white text-sm font-bold shadow-md shadow-walhi-700/20 transition flex items-center gap-2 cursor-pointer">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        <span>Simpan ke Arsip</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL PREVIEW PDF ==================== -->
+    <div id="preview-modal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full h-[85vh] flex flex-col overflow-hidden border border-slate-200 fade-in">
+            <!-- Modal Header -->
+            <div class="bg-walhi-900 text-white px-6 py-3.5 flex items-center justify-between">
+                <div>
+                    <span id="preview-dept-badge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-walhi-700 text-walhi-100 uppercase tracking-wider">Departemen</span>
+                    <h3 id="preview-title" class="font-bold text-base mt-0.5 truncate max-w-xl">Judul Dokumen</h3>
+                    <p id="preview-number" class="text-xs text-walhi-200 font-mono mt-0.5">Nomor Arsip</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="preview-download-btn"
+                        class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                        <span>Unduh PDF</span>
+                    </button>
+                    <button onclick="closePreviewModal()" class="text-walhi-200 hover:text-white p-1 rounded-lg transition cursor-pointer">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Iframe PDF Viewer -->
+            <div class="flex-1 bg-slate-100 relative">
+                <iframe id="pdf-viewer-frame" class="w-full h-full border-0" title="PDF Viewer"></iframe>
+            </div>
+        </div>
+    </div>
+
     <!-- ==================== MODAL UNDANG ANGGOTA VIA WHATSAPP ==================== -->
     <div id="invite-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-slate-200 overflow-hidden fade-in">
@@ -592,7 +639,6 @@
             if (inviteParam === INVITE_TOKEN) {
                 sessionStorage.setItem(SESSION_KEY, 'true');
                 sessionStorage.setItem(ROLE_KEY, 'Anggota Undangan (WhatsApp)');
-                // Bersihkan parameter URL agar rapi namun sesi tetap tersimpan
                 window.history.replaceState({}, document.title, window.location.pathname);
                 showToast('Selamat datang! Anda masuk melalui tautan undangan WALHI MALUT.', 'success');
             }
@@ -664,7 +710,6 @@
         let currentPreviewUrl = null;
         let docIdToDelete = null;
 
-        // Buka / Inisialisasi IndexedDB
         function initDatabase() {
             return new Promise((resolve, reject) => {
                 if (db) return resolve(db);
@@ -692,7 +737,6 @@
             });
         }
 
-        // Ambil semua data dari IndexedDB
         function loadAllArchives() {
             if (!db) return;
             const transaction = db.transaction([STORE_NAME], 'readonly');
@@ -706,7 +750,6 @@
             };
         }
 
-        // Simpan dokumen baru ke IndexedDB
         function saveDocumentToDB(docObj) {
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction([STORE_NAME], 'readwrite');
@@ -718,7 +761,6 @@
             });
         }
 
-        // Hapus dokumen dari IndexedDB
         function deleteDocumentFromDB(id) {
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction([STORE_NAME], 'readwrite');
@@ -732,6 +774,26 @@
 
         // ==================== 3. UPLOAD & VALIDASI PDF ====================
         let timestampTimer = null;
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            const placeholder = document.getElementById('file-placeholder');
+            const selectedInfo = document.getElementById('file-selected-info');
+            const filenameSpan = document.getElementById('selected-filename');
+            const filesizeSpan = document.getElementById('selected-filesize');
+
+            if (file) {
+                if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+                    showToast('Hanya file berformat .PDF yang diperbolehkan!', 'error');
+                    event.target.value = '';
+                    return;
+                }
+                filenameSpan.textContent = file.name;
+                filesizeSpan.textContent = formatFileSize(file.size);
+                placeholder.classList.add('hidden');
+                selectedInfo.classList.remove('hidden');
+            }
+        }
 
         function openUploadModal() {
             document.getElementById('upload-form').reset();
@@ -773,7 +835,6 @@
             btn.innerHTML = `<span>Menyimpan...</span>`;
 
             try {
-                // Konversi file ke ArrayBuffer / Base64 DataURL agar mudah di-export ke JSON & di-preview
                 const base64Data = await fileToBase64(file);
                 const nowIso = new Date().toISOString();
 
@@ -853,7 +914,6 @@
             const deptFilter = document.getElementById('filter-dept').value;
             const sortOrder = document.getElementById('sort-order').value;
 
-            // Filter data
             let filtered = allDocuments.filter(doc => {
                 const matchesDept = deptFilter === 'ALL' || doc.department === deptFilter;
                 const matchesSearch = !searchQuery ||
@@ -864,7 +924,6 @@
                 return matchesDept && matchesSearch;
             });
 
-            // Sorting berdasarkan waktu posting otomatis (createdAt / date)
             filtered.sort((a, b) => {
                 const timeA = new Date(a.createdAt || a.date).getTime();
                 const timeB = new Date(b.createdAt || b.date).getTime();
@@ -950,7 +1009,6 @@
             const doc = allDocuments.find(d => d.id === id);
             if (!doc) return;
 
-            // Konversi Base64 ke Blob URL agar iframe PDF berjalan mulus tanpa batas ukuran URL
             const blob = base64ToBlob(doc.fileData, 'application/pdf');
             if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
             currentPreviewUrl = URL.createObjectURL(blob);
@@ -1152,7 +1210,6 @@ _Adil dan Lestari — Eksekutif Daerah WALHI Maluku Utara_`;
                 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
             ];
 
-            // Konversi ke Zona Waktu Indonesia Timur (WIT / Asia/Jayapura UTC+9) untuk Maluku Utara
             try {
                 const formatter = new Intl.DateTimeFormat('id-ID', {
                     timeZone: 'Asia/Jayapura',
@@ -1215,7 +1272,6 @@ _Adil dan Lestari — Eksekutif Daerah WALHI Maluku Utara_`;
             }, 3500);
         }
 
-        // Jalankan pengecekan login awal
         window.addEventListener('DOMContentLoaded', checkAuth);
     </script>
 </body>
