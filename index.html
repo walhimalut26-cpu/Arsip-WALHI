@@ -67,7 +67,7 @@
     <!-- ==================== TOAST NOTIFICATION CONTAINER ==================== -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none"></div>
 
-    <!-- ==================== HALAMAN LOGIN ==================== -->
+    <!-- ==================== HALAMAN LOGIN (SUPER ADMIN & USER DEPARTEMEN) ==================== -->
     <div id="login-screen" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-walhi-950 via-walhi-900 to-emerald-950 relative overflow-hidden">
         <!-- Decorative Ecological Background Pattern -->
         <div class="absolute inset-0 opacity-10 pointer-events-none">
@@ -84,7 +84,7 @@
 
         <div class="w-full max-w-md bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-walhi-200/50 p-8 relative z-10 fade-in">
             <!-- Header Logo & Title -->
-            <div class="text-center mb-8">
+            <div class="text-center mb-6">
                 <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-walhi-700 text-white shadow-lg shadow-walhi-700/30 mb-4">
                     <i data-lucide="trees" class="w-9 h-9"></i>
                 </div>
@@ -96,53 +96,102 @@
             </div>
 
             <!-- Login Error Alert -->
-            <div id="login-error" class="hidden mb-5 p-3.5 rounded-xl bg-red-50 border border-red-200 flex items-start gap-3 text-red-700 text-sm">
-                <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 mt-0.5 text-red-600"></i>
+            <div id="login-error" class="hidden mb-4 p-3 rounded-xl bg-red-50 border border-red-200 flex items-start gap-2.5 text-red-700 text-xs">
+                <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 mt-0.5 text-red-600"></i>
                 <div>
-                    <p class="font-semibold">Akses Ditolak</p>
-                    <p id="login-error-msg" class="text-xs text-red-600 mt-0.5">Username atau password yang Anda masukkan salah.</p>
+                    <p class="font-semibold">Akses Gagal</p>
+                    <p id="login-error-msg" class="text-xs text-red-600 mt-0.5">Username atau password salah.</p>
                 </div>
             </div>
 
-            <!-- Form Login -->
-            <form id="login-form" class="space-y-5">
+            <!-- Tabs Login Mode: Admin vs User Departemen -->
+            <div class="flex rounded-xl bg-slate-100 p-1 mb-6">
+                <button type="button" onclick="switchLoginTab('admin')" id="tab-btn-admin"
+                    class="flex-1 py-2 text-xs font-bold rounded-lg transition bg-white text-walhi-900 shadow-sm cursor-pointer">
+                    Super Admin
+                </button>
+                <button type="button" onclick="switchLoginTab('dept')" id="tab-btn-dept"
+                    class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900 cursor-pointer">
+                    User Departemen
+                </button>
+            </div>
+
+            <!-- Form Login Super Admin -->
+            <form id="login-form-admin" class="space-y-4">
                 <div>
-                    <label for="username" class="block text-sm font-semibold text-slate-700 mb-1.5">Username</label>
+                    <label for="username" class="block text-xs font-semibold text-slate-700 mb-1">Username Admin</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                            <i data-lucide="user" class="w-5 h-5"></i>
+                            <i data-lucide="user" class="w-4 h-4"></i>
                         </div>
-                        <input type="text" id="username" required autocomplete="username"
-                            placeholder="Masukkan username"
-                            class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-300 focus:border-walhi-600 focus:ring-4 focus:ring-walhi-600/15 outline-none transition text-sm font-medium">
+                        <input type="text" id="username" autocomplete="username"
+                            placeholder="Walhi2026malut"
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-walhi-600 focus:ring-3 focus:ring-walhi-600/15 outline-none text-sm font-medium">
                     </div>
                 </div>
 
                 <div>
-                    <label for="password" class="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+                    <label for="password" class="block text-xs font-semibold text-slate-700 mb-1">Password Admin</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                            <i data-lucide="lock" class="w-5 h-5"></i>
+                            <i data-lucide="lock" class="w-4 h-4"></i>
                         </div>
-                        <input type="password" id="password" required autocomplete="current-password"
-                            placeholder="Masukkan password"
-                            class="w-full pl-11 pr-11 py-3 rounded-xl border border-slate-300 focus:border-walhi-600 focus:ring-4 focus:ring-walhi-600/15 outline-none transition text-sm font-medium">
-                        <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
-                            <i data-lucide="eye" class="w-5 h-5" id="eye-icon"></i>
+                        <input type="password" id="password" autocomplete="current-password"
+                            placeholder="lestari2026"
+                            class="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 focus:border-walhi-600 focus:ring-3 focus:ring-walhi-600/15 outline-none text-sm font-medium">
+                        <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer">
+                            <i data-lucide="eye" class="w-4 h-4" id="eye-icon"></i>
                         </button>
                     </div>
                 </div>
 
                 <button type="submit"
-                    class="w-full py-3.5 px-4 bg-walhi-700 hover:bg-walhi-800 active:bg-walhi-900 text-white font-semibold rounded-xl shadow-lg shadow-walhi-700/25 transition flex items-center justify-center gap-2 cursor-pointer">
-                    <i data-lucide="log-in" class="w-5 h-5"></i>
-                    <span>Masuk ke Sistem Arsip</span>
+                    class="w-full py-3 px-4 bg-walhi-700 hover:bg-walhi-800 active:bg-walhi-900 text-white font-semibold rounded-xl shadow-lg shadow-walhi-700/25 transition flex items-center justify-center gap-2 cursor-pointer mt-2">
+                    <i data-lucide="log-in" class="w-4 h-4"></i>
+                    <span>Masuk sebagai Super Admin</span>
                 </button>
             </form>
 
-            <div class="mt-6 pt-5 border-t border-slate-100 text-center">
+            <!-- Form Login User Departemen (Terundang) -->
+            <form id="login-form-dept" class="hidden space-y-4">
+                <div>
+                    <label for="dept-select-login" class="block text-xs font-semibold text-slate-700 mb-1">Pilih Departemen Anda</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i data-lucide="building-2" class="w-4 h-4"></i>
+                        </div>
+                        <select id="dept-select-login" required
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-walhi-600 focus:ring-3 focus:ring-walhi-600/15 outline-none text-sm bg-white font-medium text-slate-700">
+                            <option value="" disabled selected>-- Pilih Departemen --</option>
+                            <option value="Departemen Manajemen Pengetahuan dan Database">Departemen Manajemen Pengetahuan dan Database</option>
+                            <option value="Departemen Advokasi dan Kampanye">Departemen Advokasi dan Kampanye</option>
+                            <option value="Departemen Pengembangan Program">Departemen Pengembangan Program</option>
+                            <option value="Departemen Keuangan">Departemen Keuangan</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="dept-user-name" class="block text-xs font-semibold text-slate-700 mb-1">Nama / Perwakilan Pengguna</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i data-lucide="user-check" class="w-4 h-4"></i>
+                        </div>
+                        <input type="text" id="dept-user-name" required placeholder="Contoh: Staf Departemen Keuangan"
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-walhi-600 focus:ring-3 focus:ring-walhi-600/15 outline-none text-sm font-medium">
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-lg shadow-emerald-600/25 transition flex items-center justify-center gap-2 cursor-pointer mt-2">
+                    <i data-lucide="log-in" class="w-4 h-4"></i>
+                    <span>Masuk sebagai User Departemen</span>
+                </button>
+            </form>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 text-center">
                 <p class="text-xs text-slate-400 flex items-center justify-center gap-1.5">
-                    <i data-lucide="shield-check" class="w-4 h-4 text-walhi-600"></i>
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-walhi-600"></i>
                     <span>Adil dan Lestari • Eksekutif Daerah Maluku Utara</span>
                 </p>
             </div>
@@ -162,12 +211,15 @@
                             <i data-lucide="leaf" class="w-6 h-6 text-white"></i>
                         </div>
                         <div>
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-2 flex-wrap">
                                 <h1 class="text-base sm:text-lg font-bold tracking-tight leading-tight">
                                     Sistem Pengarsipan Digital - WALHI MALUT
                                 </h1>
+                                <span id="user-role-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-walhi-700 text-walhi-100 uppercase border border-walhi-600">
+                                    Admin
+                                </span>
                             </div>
-                            <p class="text-xs text-walhi-200 hidden sm:block">
+                            <p id="user-info-subtitle" class="text-xs text-walhi-200 hidden sm:block">
                                 Wahana Lingkungan Hidup Indonesia • Eksekutif Daerah Maluku Utara
                             </p>
                         </div>
@@ -175,26 +227,19 @@
 
                     <!-- Right Actions -->
                     <div class="flex items-center gap-2 sm:gap-3">
-                        <!-- Tombol Undang Anggota via WhatsApp -->
+                        <!-- Tombol Undang Anggota via WhatsApp (Tampil untuk semua/admin) -->
                         <button onclick="openInviteModal()" title="Undang Anggota Lain via WhatsApp"
                             class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-semibold transition flex items-center gap-1.5 shadow-sm border border-emerald-400/30 cursor-pointer">
                             <i data-lucide="share-2" class="w-4 h-4"></i>
                             <span>Undang via WhatsApp</span>
                         </button>
 
-                        <!-- Backup / Restore Dropdown or Buttons -->
-                        <button onclick="exportDatabase()" title="Unduh Backup Database JSON untuk GitHub"
+                        <!-- Backup JSON -->
+                        <button onclick="exportDatabase()" title="Unduh Backup Database JSON"
                             class="px-3 py-2 rounded-xl bg-walhi-800 hover:bg-walhi-700 text-walhi-100 text-xs sm:text-sm font-medium transition flex items-center gap-1.5 border border-walhi-700 cursor-pointer">
                             <i data-lucide="download-cloud" class="w-4 h-4 text-walhi-300"></i>
                             <span class="hidden lg:inline">Backup JSON</span>
                         </button>
-
-                        <label title="Pulihkan Database dari File JSON"
-                            class="px-3 py-2 rounded-xl bg-walhi-800 hover:bg-walhi-700 text-walhi-100 text-xs sm:text-sm font-medium transition flex items-center gap-1.5 border border-walhi-700 cursor-pointer">
-                            <i data-lucide="upload-cloud" class="w-4 h-4 text-walhi-300"></i>
-                            <span class="hidden lg:inline">Restore JSON</span>
-                            <input type="file" id="import-json-input" accept=".json" class="hidden" onchange="importDatabase(event)">
-                        </label>
 
                         <div class="h-6 w-px bg-walhi-700 mx-1 hidden sm:block"></div>
 
@@ -211,19 +256,19 @@
         <!-- Main Content -->
         <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
 
-            <!-- Info Banner GitHub Ready & Tombol Posting Mencolok -->
+            <!-- Info Banner & Tombol Posting Mencolok -->
             <div class="bg-gradient-to-r from-walhi-800 to-walhi-900 rounded-2xl p-6 text-white shadow-lg border border-walhi-700 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="space-y-2 text-center md:text-left">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-walhi-700/80 text-walhi-100 text-xs font-semibold">
                         <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-                        <span>Dashboard Resmi Eksekutif Daerah Maluku Utara</span>
+                        <span id="banner-welcome-text">Dashboard Resmi Eksekutif Daerah Maluku Utara</span>
                     </div>
-                    <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">Sistem Pengarsipan Digital WALHI MALUT</h2>
+                    <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">Sistem Pengarsipan Dokumen PDF</h2>
                     <p class="text-xs sm:text-sm text-walhi-200 max-w-2xl">
-                        Unggah dan kelola dokumen PDF dari 4 departemen utama. Seluruh arsip tersimpan aman di browser dan dapat dibagikan ke anggota melalui WhatsApp.
+                        Seluruh arsip dari departemen (Manajemen Pengetahuan, Advokasi, Program, Keuangan) dapat dilihat secara transparan oleh semua pengguna terdaftar.
                     </p>
                 </div>
-                <!-- Tombol Posting Utama yang Sangat Jelas dan Mencolok -->
+                <!-- Tombol Posting Utama -->
                 <button onclick="openUploadModal()"
                     class="shrink-0 px-6 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-walhi-950 font-extrabold text-sm sm:text-base rounded-xl shadow-xl shadow-emerald-500/30 transition transform hover:scale-105 flex items-center gap-2.5 cursor-pointer border-2 border-emerald-300">
                     <i data-lucide="file-plus-2" class="w-5 h-5"></i>
@@ -326,10 +371,10 @@
                     <div class="md:col-span-4">
                         <select id="filter-dept" onchange="renderArchives()"
                             class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-walhi-600 focus:ring-3 focus:ring-walhi-600/15 outline-none text-sm bg-white font-medium text-slate-700">
-                            <option value="ALL">Semua Departemen (4 Kategori)</option>
-                            <option value="Departemen Manajemen Pengetahuan dan Database">1. Departemen Manajemen Pengetahuan dan Database</option>
-                            <option value="Departemen Advokasi dan Kampanye">2. Departemen Advokasi dan Kampanye</option>
-                            <option value="Departemen Pengembangan Program">3. Departemen Pengembangan Program</option>
+                            <option value="ALL">Semua Departemen (Lintas Sektoral)</option>
+                            <option value="Departemen Manajemen Pengetahuan dan Database">1. Manajemen Pengetahuan dan Database</option>
+                            <option value="Departemen Advokasi dan Kampanye">2. Advokasi dan Kampanye</option>
+                            <option value="Departemen Pengembangan Program">3. Pengembangan Program</option>
                             <option value="Departemen Keuangan">4. Departemen Keuangan</option>
                         </select>
                     </div>
@@ -352,7 +397,7 @@
                 <div class="px-5 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2 bg-slate-50/60">
                     <div class="flex items-center gap-2">
                         <i data-lucide="archive" class="w-5 h-5 text-walhi-700"></i>
-                        <h3 class="font-bold text-slate-800 text-base">Postingan Arsip PDF (Semua Departemen)</h3>
+                        <h3 class="font-bold text-slate-800 text-base">Arsip Dokumen PDF (Semua Departemen)</h3>
                     </div>
                     <span id="showing-info" class="text-xs font-medium text-slate-500 bg-white px-3 py-1 rounded-full border border-slate-200">
                         Menampilkan 0 dokumen
@@ -365,9 +410,9 @@
                         <thead>
                             <tr class="bg-walhi-50/70 text-walhi-900 text-xs uppercase tracking-wider border-b border-walhi-100">
                                 <th class="py-3.5 px-5 font-bold">Dokumen & Keterangan</th>
-                                <th class="py-3.5 px-4 font-bold">Nomor Arsip/Surat</th>
+                                <th class="py-3.5 px-4 font-bold">Nomor Arsip / Surat</th>
                                 <th class="py-3.5 px-4 font-bold">Departemen</th>
-                                <th class="py-3.5 px-4 font-bold">Waktu Posting (Otomatis)</th>
+                                <th class="py-3.5 px-4 font-bold">Waktu Posting & Pengunggah</th>
                                 <th class="py-3.5 px-4 font-bold">Ukuran</th>
                                 <th class="py-3.5 px-5 font-bold text-right">Aksi</th>
                             </tr>
@@ -398,7 +443,7 @@
 
         <!-- Footer -->
         <footer class="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500">
-            <p>&copy; 2026 <strong class="text-walhi-800">WALHI MALUT</strong> (Wahana Lingkungan Hidup Indonesia - Maluku Utara). Sistem Pengarsipan Digital.</p>
+            <p>&copy; 2026 <strong class="text-walhi-800">WALHI MALUT</strong> (Wahana Lingkungan Hidup Indonesia - Maluku Utara). Sistem Pengarsipan Digital Lintas Departemen.</p>
         </footer>
     </div>
 
@@ -429,7 +474,7 @@
                         <div id="file-placeholder">
                             <i data-lucide="file-text" class="w-9 h-9 text-walhi-600 mx-auto mb-2"></i>
                             <p class="text-sm font-semibold text-slate-700">Klik untuk memilih file PDF</p>
-                            <p class="text-xs text-slate-500 mt-1">Hanya mendukung format dokumen <span class="font-bold text-walhi-700">.PDF</span></p>
+                            <p class="text-xs text-slate-500 mt-1">Format dokumen <span class="font-bold text-walhi-700">.PDF</span></p>
                         </div>
                         <div id="file-selected-info" class="hidden">
                             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-walhi-100 text-walhi-800 font-semibold text-sm">
@@ -446,7 +491,7 @@
                     <label for="doc-title" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
                         Judul Dokumen <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" id="doc-title" required placeholder="Contoh: Laporan Kajian Lingkungan Hidup Pesisir Halmahera"
+                    <input type="text" id="doc-title" required placeholder="Contoh: Laporan Kajian Lingkungan Hidup Pesisir"
                         class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-walhi-600 focus:ring-3 focus:ring-walhi-600/15 outline-none text-sm">
                 </div>
 
@@ -456,16 +501,16 @@
                         <label for="doc-number" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
                             Nomor Surat / Arsip <span class="text-red-500">*</span>
                         </label>
-                        <input type="text" id="doc-number" required placeholder="Contoh: 014/ED-WALHI-MU/XI/2026"
+                        <input type="text" id="doc-number" required placeholder="Contoh: 014/WALHI-MU/XI/2026"
                             class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-walhi-600 focus:ring-3 focus:ring-walhi-600/15 outline-none text-sm">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                            Waktu Posting Otomatis
+                            Waktu Posting
                         </label>
                         <div class="w-full px-3.5 py-2.5 rounded-xl border border-walhi-200 bg-walhi-50/70 text-walhi-900 text-xs font-semibold flex items-center gap-2">
                             <i data-lucide="clock" class="w-4 h-4 text-walhi-600 shrink-0"></i>
-                            <span id="auto-post-timestamp">Otomatis saat disimpan</span>
+                            <span id="auto-post-timestamp">Otomatis WIT</span>
                         </div>
                     </div>
                 </div>
@@ -473,11 +518,11 @@
                 <!-- Kategori Departemen -->
                 <div>
                     <label for="doc-dept" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                        Kategori Departemen <span class="text-red-500">*</span>
+                        Departemen Pengunggah <span class="text-red-500">*</span>
                     </label>
                     <select id="doc-dept" required
                         class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-walhi-600 focus:ring-3 focus:ring-walhi-600/15 outline-none text-sm bg-white font-medium">
-                        <option value="" disabled selected>-- Pilih Departemen WALHI MALUT --</option>
+                        <option value="" disabled selected>-- Pilih Departemen --</option>
                         <option value="Departemen Manajemen Pengetahuan dan Database">Departemen Manajemen Pengetahuan dan Database</option>
                         <option value="Departemen Advokasi dan Kampanye">Departemen Advokasi dan Kampanye</option>
                         <option value="Departemen Pengembangan Program">Departemen Pengembangan Program</option>
@@ -490,7 +535,7 @@
                     <label for="doc-desc" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
                         Keterangan / Catatan Dokumen (Opsional)
                     </label>
-                    <textarea id="doc-desc" rows="3" placeholder="Tambahkan ringkasan atau keterangan dokumen..."
+                    <textarea id="doc-desc" rows="3" placeholder="Tambahkan ringkasan dokumen..."
                         class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-walhi-600 focus:ring-3 focus:ring-walhi-600/15 outline-none text-sm"></textarea>
                 </div>
 
@@ -554,13 +599,13 @@
 
             <div class="p-6 space-y-4">
                 <p class="text-xs text-slate-600 leading-relaxed">
-                    Bagikan tautan akses sistem arsip <strong>WALHI MALUT</strong> ke rekan departemen atau anggota melalui WhatsApp agar mereka dapat langsung melihat seluruh dokumen arsip yang telah diposting.
+                    Bagikan tautan undangan akses arsip <strong>WALHI MALUT</strong> ke rekan departemen melalui WhatsApp. Anggota dapat langsung memilih departemen mereka dan melihat seluruh arsip lintas departemen.
                 </p>
 
-                <!-- Preview Tautan Undangan Cepat -->
+                <!-- Tautan Undangan -->
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                        Tautan Akses Langsung (Auto-Login Undangan)
+                        Tautan Akses Undangan
                     </label>
                     <div class="flex items-center gap-2">
                         <input type="text" id="invite-link-input" readonly
@@ -576,14 +621,14 @@
                 <!-- Preview Pesan WhatsApp -->
                 <div>
                     <label for="invite-message-preview" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                        Pratinjau Pesan Undangan WhatsApp
+                        Pratinjau Pesan WhatsApp
                     </label>
                     <textarea id="invite-message-preview" rows="6"
                         class="w-full p-3 rounded-xl border border-slate-300 focus:border-emerald-600 focus:ring-3 focus:ring-emerald-600/15 outline-none text-xs text-slate-700 leading-relaxed"></textarea>
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="pt-2 flex flex-col sm:flex-row items-center gap-2.5">
+                <!-- Action Button -->
+                <div class="pt-2">
                     <button type="button" onclick="sendWhatsAppInvite()"
                         class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-md shadow-emerald-600/20 transition flex items-center justify-center gap-2 cursor-pointer">
                         <i data-lucide="send" class="w-4 h-4"></i>
@@ -602,7 +647,7 @@
             </div>
             <h3 class="text-lg font-bold text-slate-900">Hapus Dokumen Arsip?</h3>
             <p class="text-sm text-slate-500 mt-1.5">
-                Dokumen <strong id="delete-doc-name" class="text-slate-800"></strong> akan dihapus secara permanen dari penyimpanan browser.
+                Dokumen <strong id="delete-doc-name" class="text-slate-800"></strong> akan dihapus secara permanen.
             </p>
             <div class="mt-6 flex items-center justify-center gap-3">
                 <button onclick="closeDeleteModal()"
@@ -622,45 +667,88 @@
         // Inisialisasi ikon Lucide
         lucide.createIcons();
 
-        // ==================== 1. KONFIGURASI AUTENTIKASI ====================
-        const AUTH_CREDENTIALS = {
+        // ==================== 1. KONFIGURASI SESI & AUTENTIKASI ====================
+        const ADMIN_CREDENTIALS = {
             username: 'Walhi2026malut',
             password: 'lestari2026'
         };
         const INVITE_TOKEN = 'walhi2026';
-        const SESSION_KEY = 'walhi_malut_auth_session';
-        const ROLE_KEY = 'walhi_malut_user_role';
+        const SESSION_IS_LOGGED = 'walhi_malut_auth_session';
+        const SESSION_ROLE = 'walhi_malut_user_role'; // 'ADMIN' atau 'DEPT'
+        const SESSION_DEPT_NAME = 'walhi_malut_dept_name'; // Nama departemen jika user dept
+        const SESSION_USER_NAME = 'walhi_malut_user_name'; // Nama pengunggah
 
-        // Cek status login & parameter undangan URL (?invite=walhi2026) saat halaman dimuat
+        function switchLoginTab(mode) {
+            const btnAdmin = document.getElementById('tab-btn-admin');
+            const btnDept = document.getElementById('tab-btn-dept');
+            const formAdmin = document.getElementById('login-form-admin');
+            const formDept = document.getElementById('login-form-dept');
+            const errorBox = document.getElementById('login-error');
+            errorBox.classList.add('hidden');
+
+            if (mode === 'admin') {
+                btnAdmin.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition bg-white text-walhi-900 shadow-sm cursor-pointer';
+                btnDept.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900 cursor-pointer';
+                formAdmin.classList.remove('hidden');
+                formDept.classList.add('hidden');
+            } else {
+                btnDept.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition bg-emerald-600 text-white shadow-sm cursor-pointer';
+                btnAdmin.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900 cursor-pointer';
+                formDept.classList.remove('hidden');
+                formAdmin.classList.add('hidden');
+            }
+        }
+
+        // Cek autentikasi & parameter ?invite=walhi2026
         function checkAuth() {
             const urlParams = new URLSearchParams(window.location.search);
             const inviteParam = urlParams.get('invite');
 
             if (inviteParam === INVITE_TOKEN) {
-                sessionStorage.setItem(SESSION_KEY, 'true');
-                sessionStorage.setItem(ROLE_KEY, 'Anggota Undangan (WhatsApp)');
+                // Jika dari tautan undangan WhatsApp, arahkan otomatis ke tab User Departemen
+                switchLoginTab('dept');
                 window.history.replaceState({}, document.title, window.location.pathname);
-                showToast('Selamat datang! Anda masuk melalui tautan undangan WALHI MALUT.', 'success');
+                showToast('Tautan undangan valid! Silakan pilih departemen Anda.', 'success');
             }
 
-            const isLoggedIn = sessionStorage.getItem(SESSION_KEY) === 'true';
-            const userRole = sessionStorage.getItem(ROLE_KEY) || 'Administrator WALHI MALUT';
+            const isLoggedIn = sessionStorage.getItem(SESSION_IS_LOGGED) === 'true';
+            const role = sessionStorage.getItem(SESSION_ROLE);
             const loginScreen = document.getElementById('login-screen');
             const appScreen = document.getElementById('app-screen');
 
             if (isLoggedIn) {
                 loginScreen.classList.add('hidden');
                 appScreen.classList.remove('hidden');
-                const roleBadge = document.getElementById('user-role-badge');
-                if (roleBadge) roleBadge.textContent = userRole;
-                initDatabase().then(() => loadAllArchives());
+
+                const badge = document.getElementById('user-role-badge');
+                const subtitle = document.getElementById('user-info-subtitle');
+                const bannerText = document.getElementById('banner-welcome-text');
+
+                if (role === 'ADMIN') {
+                    badge.textContent = 'Super Admin';
+                    badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-walhi-700 text-walhi-100 uppercase border border-walhi-600';
+                    subtitle.textContent = 'Administrator Utama • Eksekutif Daerah Maluku Utara';
+                    bannerText.textContent = 'Dashboard Super Admin • Akses Penuh Lintas Departemen';
+                } else {
+                    const deptName = sessionStorage.getItem(SESSION_DEPT_NAME) || 'Departemen';
+                    const userName = sessionStorage.getItem(SESSION_USER_NAME) || 'Anggota';
+                    badge.textContent = deptName.replace('Departemen ', '');
+                    badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-700 text-emerald-100 uppercase border border-emerald-600';
+                    subtitle.textContent = `${userName} (${deptName}) • Akses Arsip Lintas Sektoral`;
+                    bannerText.textContent = `Dashboard ${deptName} • Bisa Melihat & Mengunggah Arsip`;
+                }
+
+                initDatabase().then(() => loadAllArchives()).catch(err => {
+                    console.error("Gagal inisialisasi DB:", err);
+                    showToast("Gagal memuat database arsip browser", "error");
+                });
             } else {
                 loginScreen.classList.remove('hidden');
                 appScreen.classList.add('hidden');
             }
         }
 
-        // Toggle tampilkan/sembunyikan password
+        // Toggle Password Admin
         document.getElementById('toggle-password').addEventListener('click', () => {
             const pwdInput = document.getElementById('password');
             const eyeIcon = document.getElementById('eye-icon');
@@ -674,29 +762,59 @@
             lucide.createIcons();
         });
 
-        // Proses Form Login
-        document.getElementById('login-form').addEventListener('submit', (e) => {
+        // Submit Form Super Admin
+        document.getElementById('login-form-admin').addEventListener('submit', (e) => {
             e.preventDefault();
-            const userVal = document.getElementById('username').value.trim();
-            const passVal = document.getElementById('password').value;
+            const u = document.getElementById('username').value.trim();
+            const p = document.getElementById('password').value;
             const errorBox = document.getElementById('login-error');
+            const errorMsg = document.getElementById('login-error-msg');
 
-            if (userVal === AUTH_CREDENTIALS.username && passVal === AUTH_CREDENTIALS.password) {
+            if (u === ADMIN_CREDENTIALS.username && p === ADMIN_CREDENTIALS.password) {
                 errorBox.classList.add('hidden');
-                sessionStorage.setItem(SESSION_KEY, 'true');
-                sessionStorage.setItem(ROLE_KEY, 'Administrator WALHI MALUT');
-                showToast('Berhasil masuk ke Sistem Arsip WALHI MALUT', 'success');
+                sessionStorage.setItem(SESSION_IS_LOGGED, 'true');
+                sessionStorage.setItem(SESSION_ROLE, 'ADMIN');
+                sessionStorage.removeItem(SESSION_DEPT_NAME);
+                sessionStorage.setItem(SESSION_USER_NAME, 'Super Admin');
+                showToast('Berhasil masuk sebagai Super Admin WALHI MALUT', 'success');
                 checkAuth();
             } else {
+                errorMsg.textContent = 'Username atau password Super Admin salah.';
                 errorBox.classList.remove('hidden');
             }
         });
 
-        // Proses Logout
+        // Submit Form User Departemen
+        document.getElementById('login-form-dept').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const dept = document.getElementById('dept-select-login').value;
+            const name = document.getElementById('dept-user-name').value.trim();
+            const errorBox = document.getElementById('login-error');
+            const errorMsg = document.getElementById('login-error-msg');
+
+            if (!dept || !name) {
+                errorMsg.textContent = 'Silakan pilih departemen dan isi nama Anda.';
+                errorBox.classList.remove('hidden');
+                return;
+            }
+
+            errorBox.classList.add('hidden');
+            sessionStorage.setItem(SESSION_IS_LOGGED, 'true');
+            sessionStorage.setItem(SESSION_ROLE, 'DEPT');
+            sessionStorage.setItem(SESSION_DEPT_NAME, dept);
+            sessionStorage.setItem(SESSION_USER_NAME, name);
+            showToast(`Berhasil masuk sebagai ${name} (${dept})`, 'success');
+            checkAuth();
+        });
+
+        // Logout
         function handleLogout() {
-            sessionStorage.removeItem(SESSION_KEY);
-            sessionStorage.removeItem(ROLE_KEY);
-            document.getElementById('login-form').reset();
+            sessionStorage.removeItem(SESSION_IS_LOGGED);
+            sessionStorage.removeItem(SESSION_ROLE);
+            sessionStorage.removeItem(SESSION_DEPT_NAME);
+            sessionStorage.removeItem(SESSION_USER_NAME);
+            document.getElementById('login-form-admin').reset();
+            document.getElementById('login-form-dept').reset();
             showToast('Anda telah keluar dari sistem', 'info');
             checkAuth();
         }
@@ -731,7 +849,6 @@
 
                 request.onerror = (event) => {
                     console.error('IndexedDB Error:', event.target.error);
-                    showToast('Gagal membuka penyimpanan lokal browser', 'error');
                     reject(event.target.error);
                 };
             });
@@ -739,19 +856,27 @@
 
         function loadAllArchives() {
             if (!db) return;
-            const transaction = db.transaction([STORE_NAME], 'readonly');
-            const store = transaction.objectStore(STORE_NAME);
-            const request = store.getAll();
+            try {
+                const transaction = db.transaction([STORE_NAME], 'readonly');
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.getAll();
 
-            request.onsuccess = () => {
-                allDocuments = request.result || [];
-                updateStats();
-                renderArchives();
-            };
+                request.onsuccess = () => {
+                    allDocuments = request.result || [];
+                    updateStats();
+                    renderArchives();
+                };
+                request.onerror = (e) => {
+                    console.error('Gagal mengambil data arsip:', e);
+                };
+            } catch (err) {
+                console.error('Error loadAllArchives:', err);
+            }
         }
 
         function saveDocumentToDB(docObj) {
             return new Promise((resolve, reject) => {
+                if (!db) return reject(new Error('Database belum siap'));
                 const transaction = db.transaction([STORE_NAME], 'readwrite');
                 const store = transaction.objectStore(STORE_NAME);
                 const request = store.put(docObj);
@@ -763,6 +888,7 @@
 
         function deleteDocumentFromDB(id) {
             return new Promise((resolve, reject) => {
+                if (!db) return reject(new Error('Database belum siap'));
                 const transaction = db.transaction([STORE_NAME], 'readwrite');
                 const store = transaction.objectStore(STORE_NAME);
                 const request = store.delete(id);
@@ -799,6 +925,18 @@
             document.getElementById('upload-form').reset();
             document.getElementById('file-placeholder').classList.remove('hidden');
             document.getElementById('file-selected-info').classList.add('hidden');
+
+            const role = sessionStorage.getItem(SESSION_ROLE);
+            const deptSelect = document.getElementById('doc-dept');
+
+            if (role === 'DEPT') {
+                const userDept = sessionStorage.getItem(SESSION_DEPT_NAME);
+                deptSelect.value = userDept;
+                deptSelect.disabled = true; // Kunci departemen untuk user departemen ybs
+            } else {
+                deptSelect.disabled = false;
+            }
+
             updateLiveTimestampPreview();
             if (timestampTimer) clearInterval(timestampTimer);
             timestampTimer = setInterval(updateLiveTimestampPreview, 1000);
@@ -837,13 +975,18 @@
             try {
                 const base64Data = await fileToBase64(file);
                 const nowIso = new Date().toISOString();
+                const role = sessionStorage.getItem(SESSION_ROLE);
+                const uploaderName = sessionStorage.getItem(SESSION_USER_NAME) || (role === 'ADMIN' ? 'Super Admin' : 'Anggota Departemen');
+                
+                const deptVal = role === 'DEPT' ? sessionStorage.getItem(SESSION_DEPT_NAME) : document.getElementById('doc-dept').value;
 
                 const newDoc = {
                     id: 'DOC-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase(),
                     title: document.getElementById('doc-title').value.trim(),
                     number: document.getElementById('doc-number').value.trim(),
                     date: nowIso,
-                    department: document.getElementById('doc-dept').value,
+                    department: deptVal,
+                    uploader: uploaderName,
                     description: document.getElementById('doc-desc').value.trim(),
                     fileName: file.name,
                     fileSize: file.size,
@@ -854,7 +997,7 @@
                 await saveDocumentToDB(newDoc);
                 closeUploadModal();
                 loadAllArchives();
-                showToast('Dokumen PDF berhasil diarsipkan!', 'success');
+                showToast('Dokumen PDF berhasil diarsipkan dan dibagikan ke semua departemen!', 'success');
             } catch (err) {
                 console.error(err);
                 showToast('Terjadi kesalahan saat menyimpan dokumen PDF', 'error');
@@ -913,6 +1056,8 @@
             const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
             const deptFilter = document.getElementById('filter-dept').value;
             const sortOrder = document.getElementById('sort-order').value;
+            const currentRole = sessionStorage.getItem(SESSION_ROLE);
+            const currentDept = sessionStorage.getItem(SESSION_DEPT_NAME);
 
             let filtered = allDocuments.filter(doc => {
                 const matchesDept = deptFilter === 'ALL' || doc.department === deptFilter;
@@ -920,7 +1065,8 @@
                     doc.title.toLowerCase().includes(searchQuery) ||
                     doc.number.toLowerCase().includes(searchQuery) ||
                     (doc.description && doc.description.toLowerCase().includes(searchQuery)) ||
-                    doc.fileName.toLowerCase().includes(searchQuery);
+                    doc.fileName.toLowerCase().includes(searchQuery) ||
+                    (doc.uploader && doc.uploader.toLowerCase().includes(searchQuery));
                 return matchesDept && matchesSearch;
             });
 
@@ -936,7 +1082,7 @@
 
             const tbody = document.getElementById('archive-table-body');
             const emptyState = document.getElementById('empty-state');
-            document.getElementById('showing-info').textContent = `Menampilkan ${filtered.length} dari ${allDocuments.length} dokumen`;
+            document.getElementById('showing-info').textContent = `Menampilkan ${filtered.length} dari ${allDocuments.length} dokumen (Lintas Departemen)`;
 
             if (filtered.length === 0) {
                 tbody.innerHTML = '';
@@ -945,61 +1091,71 @@
             }
 
             emptyState.classList.add('hidden');
-            tbody.innerHTML = filtered.map(doc => `
-                <tr class="hover:bg-walhi-50/40 transition group">
-                    <td class="py-4 px-5 max-w-xs sm:max-w-sm">
-                        <div class="flex items-start gap-3">
-                            <div class="p-2 rounded-lg bg-red-50 text-red-600 border border-red-100 shrink-0 mt-0.5">
-                                <i data-lucide="file-text" class="w-5 h-5"></i>
+            tbody.innerHTML = filtered.map(doc => {
+                // Hak hapus: Admin atau pengunggah itu sendiri
+                const canDelete = currentRole === 'ADMIN' || (currentRole === 'DEPT' && doc.department === currentDept);
+
+                return `
+                    <tr class="hover:bg-walhi-50/40 transition group">
+                        <td class="py-4 px-5 max-w-xs sm:max-w-sm">
+                            <div class="flex items-start gap-3">
+                                <div class="p-2 rounded-lg bg-red-50 text-red-600 border border-red-100 shrink-0 mt-0.5">
+                                    <i data-lucide="file-text" class="w-5 h-5"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="font-bold text-slate-800 group-hover:text-walhi-800 transition truncate" title="${escapeHtml(doc.title)}">
+                                        ${escapeHtml(doc.title)}
+                                    </p>
+                                    <p class="text-xs text-slate-500 line-clamp-1 mt-0.5">
+                                        ${doc.description ? escapeHtml(doc.description) : '<span class="italic text-slate-400">Tidak ada keterangan</span>'}
+                                    </p>
+                                </div>
                             </div>
-                            <div class="min-w-0">
-                                <p class="font-bold text-slate-800 group-hover:text-walhi-800 transition truncate" title="${escapeHtml(doc.title)}">
-                                    ${escapeHtml(doc.title)}
-                                </p>
-                                <p class="text-xs text-slate-500 line-clamp-1 mt-0.5">
-                                    ${doc.description ? escapeHtml(doc.description) : '<span class="italic text-slate-400">Tidak ada keterangan</span>'}
-                                </p>
+                        </td>
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
+                                ${escapeHtml(doc.number)}
+                            </span>
+                        </td>
+                        <td class="py-4 px-4">
+                            <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full border ${getDeptBadgeStyle(doc.department)}">
+                                ${escapeHtml(doc.department)}
+                            </span>
+                        </td>
+                        <td class="py-4 px-4 whitespace-nowrap text-xs text-slate-600">
+                            <div class="flex items-center gap-1.5 font-medium">
+                                <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-walhi-600 shrink-0"></i>
+                                <span>${formatDateTimeIndo(doc.createdAt || doc.date)}</span>
                             </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-4 whitespace-nowrap">
-                        <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
-                            ${escapeHtml(doc.number)}
-                        </span>
-                    </td>
-                    <td class="py-4 px-4">
-                        <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full border ${getDeptBadgeStyle(doc.department)}">
-                            ${escapeHtml(doc.department)}
-                        </span>
-                    </td>
-                    <td class="py-4 px-4 whitespace-nowrap text-xs font-medium text-slate-600">
-                        <div class="flex items-center gap-1.5">
-                            <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-walhi-600 shrink-0"></i>
-                            <span>${formatDateTimeIndo(doc.createdAt || doc.date)}</span>
-                        </div>
-                    </td>
-                    <td class="py-4 px-4 whitespace-nowrap text-xs text-slate-500">
-                        ${formatFileSize(doc.fileSize)}
-                    </td>
-                    <td class="py-4 px-5 whitespace-nowrap text-right">
-                        <div class="inline-flex items-center justify-end gap-1.5">
-                            <button onclick="previewPDF('${doc.id}')" title="Lihat / Preview PDF"
-                                class="px-2.5 py-1.5 rounded-lg bg-walhi-100 hover:bg-walhi-700 text-walhi-800 hover:text-white text-xs font-semibold transition inline-flex items-center gap-1 cursor-pointer">
-                                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
-                                <span>Lihat</span>
-                            </button>
-                            <button onclick="downloadPDF('${doc.id}')" title="Unduh File PDF"
-                                class="p-1.5 rounded-lg bg-slate-100 hover:bg-blue-600 text-slate-600 hover:text-white transition cursor-pointer">
-                                <i data-lucide="download" class="w-4 h-4"></i>
-                            </button>
-                            <button onclick="askDeleteDocument('${doc.id}')" title="Hapus Dokumen"
-                                class="p-1.5 rounded-lg bg-slate-100 hover:bg-red-600 text-slate-600 hover:text-white transition cursor-pointer">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+                            <div class="text-[11px] text-slate-400 mt-0.5 flex items-center gap-1">
+                                <i data-lucide="user" class="w-3 h-3"></i>
+                                <span>Oleh: ${escapeHtml(doc.uploader || 'Admin')}</span>
+                            </div>
+                        </td>
+                        <td class="py-4 px-4 whitespace-nowrap text-xs text-slate-500">
+                            ${formatFileSize(doc.fileSize)}
+                        </td>
+                        <td class="py-4 px-5 whitespace-nowrap text-right">
+                            <div class="inline-flex items-center justify-end gap-1.5">
+                                <button onclick="previewPDF('${doc.id}')" title="Lihat / Preview PDF"
+                                    class="px-2.5 py-1.5 rounded-lg bg-walhi-100 hover:bg-walhi-700 text-walhi-800 hover:text-white text-xs font-semibold transition inline-flex items-center gap-1 cursor-pointer">
+                                    <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                                    <span>Lihat</span>
+                                </button>
+                                <button onclick="downloadPDF('${doc.id}')" title="Unduh File PDF"
+                                    class="p-1.5 rounded-lg bg-slate-100 hover:bg-blue-600 text-slate-600 hover:text-white transition cursor-pointer">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                </button>
+                                ${canDelete ? `
+                                <button onclick="askDeleteDocument('${doc.id}')" title="Hapus Dokumen"
+                                    class="p-1.5 rounded-lg bg-slate-100 hover:bg-red-600 text-slate-600 hover:text-white transition cursor-pointer">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
 
             lucide.createIcons();
         }
@@ -1014,7 +1170,7 @@
             currentPreviewUrl = URL.createObjectURL(blob);
 
             document.getElementById('preview-dept-badge').textContent = doc.department;
-            document.getElementById('preview-number').textContent = doc.number;
+            document.getElementById('preview-number').textContent = doc.number + ' • Oleh: ' + (doc.uploader || 'Admin');
             document.getElementById('preview-title').textContent = doc.title;
             document.getElementById('pdf-viewer-frame').src = currentPreviewUrl;
 
@@ -1077,7 +1233,7 @@
             docIdToDelete = null;
         }
 
-        // ==================== 6. BACKUP & RESTORE JSON DATABASE ====================
+        // ==================== 6. BACKUP DATABASE JSON ====================
         function exportDatabase() {
             if (allDocuments.length === 0) {
                 showToast('Belum ada data arsip untuk di-backup', 'info');
@@ -1093,37 +1249,7 @@
             showToast('File backup database JSON berhasil diunduh!', 'success');
         }
 
-        async function importDatabase(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    const importedArray = JSON.parse(e.target.result);
-                    if (!Array.isArray(importedArray)) {
-                        throw new Error('Format file JSON tidak valid');
-                    }
-
-                    for (const doc of importedArray) {
-                        if (doc.id && doc.title && doc.fileData) {
-                            await saveDocumentToDB(doc);
-                        }
-                    }
-
-                    loadAllArchives();
-                    showToast(`Berhasil memulihkan ${importedArray.length} dokumen arsip!`, 'success');
-                } catch (err) {
-                    console.error(err);
-                    showToast('Gagal memulihkan database. Pastikan file JSON benar.', 'error');
-                } finally {
-                    event.target.value = '';
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        // ==================== 7. UNDANG USER VIA WHATSAPP ====================
+        // ==================== 7. UNDANG ANGGOTA VIA WHATSAPP ====================
         function getInviteUrl() {
             const baseUrl = window.location.origin + window.location.pathname;
             return `${baseUrl}?invite=${INVITE_TOKEN}`;
@@ -1136,15 +1262,11 @@
             const defaultMsg =
 `🌿 *UNDANGAN AKSES ARSIP DIGITAL - WALHI MALUT* 🌿
 
-Halo Rekan/Anggota WALHI Maluku Utara,
-Anda diundang untuk mengakses dan memantau dokumen arsip PDF seluruh departemen (Manajemen Pengetahuan & Database, Advokasi & Kampanye, Pengembangan Program, dan Keuangan).
+Halo Rekan/Anggota Departemen WALHI Maluku Utara,
+Anda diundang untuk mengakses sistem pengarsipan digital terpadu. Setiap departemen dapat melihat seluruh arsip lintas sektor secara transparan dan mengunggah dokumen PDF.
 
-🔗 *Klik tautan akses cepat berikut:*
+🔗 *Klik tautan akses berikut:*
 ${inviteUrl}
-
-Atau login manual menggunakan kredensial:
-• *Username:* ${AUTH_CREDENTIALS.username}
-• *Password:* ${AUTH_CREDENTIALS.password}
 
 _Adil dan Lestari — Eksekutif Daerah WALHI Maluku Utara_`;
 
@@ -1182,14 +1304,19 @@ _Adil dan Lestari — Eksekutif Daerah WALHI Maluku Utara_`;
 
         // ==================== 8. HELPER UTILITIES ====================
         function base64ToBlob(base64DataUrl, contentType = 'application/pdf') {
-            const parts = base64DataUrl.split(',');
-            const byteString = atob(parts[1]);
-            const ab = new ArrayBuffer(byteString.length);
-            const ia = new Uint8Array(ab);
-            for (let i = 0; i < byteString.length; i++) {
-                ia[i] = byteString.charCodeAt(i);
+            try {
+                const parts = base64DataUrl.split(',');
+                const byteString = atob(parts[1] || parts[0]);
+                const ab = new ArrayBuffer(byteString.length);
+                const ia = new Uint8Array(ab);
+                for (let i = 0; i < byteString.length; i++) {
+                    ia[i] = byteString.charCodeAt(i);
+                }
+                return new Blob([ab], { type: contentType });
+            } catch (e) {
+                console.error("Error base64ToBlob:", e);
+                return new Blob([], { type: contentType });
             }
-            return new Blob([ab], { type: contentType });
         }
 
         function formatFileSize(bytes) {
@@ -1272,7 +1399,13 @@ _Adil dan Lestari — Eksekutif Daerah WALHI Maluku Utara_`;
             }, 3500);
         }
 
-        window.addEventListener('DOMContentLoaded', checkAuth);
+        window.addEventListener('DOMContentLoaded', () => {
+            initDatabase().then(() => {
+                checkAuth();
+            }).catch(() => {
+                checkAuth();
+            });
+        });
     </script>
 </body>
 </html>
